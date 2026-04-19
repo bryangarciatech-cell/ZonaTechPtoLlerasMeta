@@ -1910,46 +1910,150 @@ img { max-width: 100%; display: block; }
   .pricing-featured:hover { transform: translateY(-6px); }
 }
 
+/* ============================================================
+   RESPONSIVE — TABLET (≤ 768px)
+============================================================ */
 @media (max-width: 768px) {
-  /* Nav mobile */
-  .nav-toggle { display: flex; }
+
+  /* ── Navbar mobile ── */
+  .nav-toggle { display: flex; z-index: 1100; position: relative; }
+
   .nav-links {
     position: fixed;
     top: 0; right: 0;
-    width: 280px; height: 100vh;
-    background: rgba(8, 13, 26, 0.98);
-    backdrop-filter: blur(20px);
+    width: min(300px, 85vw);
+    height: 100dvh;           /* dvh: respeta barra del navegador móvil */
+    background: rgba(5, 8, 16, 0.98);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 2rem;
-    gap: 0.5rem;
+    padding: 5rem 2rem 2rem;
+    gap: 0.3rem;
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    border-left: 1px solid rgba(0,212,255,0.15);
-    z-index: 1001;
+    transition: transform 0.38s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-left: 1px solid rgba(0,212,255,0.18);
+    z-index: 1050;
+    overflow-y: auto;
   }
   .nav-links.open { transform: translateX(0); }
-  .nav-link { font-size: 1.1rem; padding: 0.7rem 0.5rem; color: var(--text-primary); }
 
-  .hero { padding: 6rem 1.5rem 4rem; }
-  .hero-stats { gap: 1.2rem; }
-  .hero-buttons { flex-direction: column; align-items: center; }
+  /* Overlay oscuro detrás del menú */
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s, visibility 0.35s;
+  }
+  .nav-overlay.active { opacity: 1; visibility: visible; }
 
-  .section { padding: 5rem 1.5rem; }
-  .services-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-  .about-grid { grid-template-columns: 1fr; }
+  .nav-link {
+    font-size: 1.05rem;
+    padding: 0.75rem 0.6rem;
+    color: var(--text-primary);
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-link:last-child { border-bottom: none; }
+  .btn-nav-cta {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* ── Hero ── */
+  .hero { padding: 6rem 1.2rem 4rem; }
+  .hero-stats { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .hero-buttons { flex-direction: column; align-items: center; width: 100%; }
+  .hero-buttons .btn { width: 100%; justify-content: center; }
+
+  /* ── Secciones ── */
+  .section { padding: 4rem 1.2rem; }
+  .section-title { font-size: clamp(1.6rem, 5vw, 2.4rem); }
+
+  /* ── Servicios ── */
+  .services-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+
+  /* ── Nosotros ── */
+  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .about-visual { display: none; }
+  .about-text .section-title { text-align: center; }
+  .about-features { grid-template-columns: 1fr 1fr; }
+
+  /* ── Timeline ── */
+  .timeline-line { left: 20px; }
+  .timeline-item, .timeline-left, .timeline-right {
+    width: 100%; left: 0;
+    padding-left: 4rem; padding-right: 0;
+    text-align: left;
+  }
+  .timeline-left  .timeline-dot,
+  .timeline-right .timeline-dot { left: -2px; right: auto; }
+
+  /* ── Perfil ── */
+  .profile-card {
+    grid-template-columns: 1fr;
+    padding: 2rem 1.4rem;
+    gap: 2rem;
+    text-align: center;
+  }
+  .profile-photo-wrap { margin: 0 auto; }
+  .profile-name-wrap, .profile-title, .profile-location { justify-content: center; }
+  .profile-skills, .profile-actions { justify-content: center; }
+
+  /* ── Footer ── */
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-brand { grid-column: 1 / -1; }
 }
 
+/* ============================================================
+   RESPONSIVE — MÓVIL (≤ 480px)
+============================================================ */
 @media (max-width: 480px) {
-  .hero-title { font-size: clamp(2rem, 10vw, 3rem); }
-  .services-grid { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
-  .payment-grid { grid-template-columns: 1fr; }
-  .contact-grid { grid-template-columns: 1fr 1fr; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .footer-bottom { flex-direction: column; text-align: center; }
+  .hero-title { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+  .hero-stats .stat-number { font-size: 1.8rem; }
+  .stat-divider { display: none; }
+
+  .services-grid  { grid-template-columns: 1fr; }
+  .pricing-grid   { grid-template-columns: 1fr; }
+  .payment-grid   { grid-template-columns: 1fr; }
+  .contact-grid   { grid-template-columns: 1fr 1fr; }
+  .footer-grid    { grid-template-columns: 1fr; }
+  .footer-bottom  { flex-direction: column; text-align: center; gap: 0.5rem; }
+
+  .exp-stats { grid-template-columns: repeat(2, 1fr); }
+  .about-features { grid-template-columns: 1fr; }
+
+  /* Carrusel: 1 tarjeta en móvil pequeño */
+  .review-card { flex: 0 0 100%; }
+
+  /* Formularios */
+  .quote-form { padding: 1.5rem 1.2rem; }
+  .comment-layout { grid-template-columns: 1fr; }
+  .send-channel-options { grid-template-columns: 1fr; }
+
+  /* Botón WA flotante más pequeño */
+  .whatsapp-float { width: 52px; height: 52px; font-size: 1.5rem; bottom: 1.2rem; right: 1.2rem; }
+  .back-to-top    { right: 1.2rem; bottom: 5rem; }
+
+  /* Rating summary apilado */
+  .rating-summary { flex-direction: column; padding: 1.5rem; gap: 1.5rem; }
+  .rating-bars    { width: 100%; max-width: 100%; }
+}
+
+/* ============================================================
+   RESPONSIVE — MÓVIL MUY PEQUEÑO (≤ 360px)
+============================================================ */
+@media (max-width: 360px) {
+  .hero-title { font-size: 1.7rem; }
+  .section { padding: 3rem 1rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .exp-stats { grid-template-columns: 1fr; }
 }
 
 /* ============================================================
@@ -2308,4 +2412,91 @@ img { max-width: 100%; display: block; }
 .channel-option input:checked + .channel-card .channel-check {
   opacity: 1;
   transform: scale(1);
+}
+
+/* ============================================================
+   WOMPI PAYMENT CARD
+============================================================ */
+.wompi-card {
+  background: linear-gradient(135deg, rgba(99,38,200,0.12) 0%, rgba(0,212,255,0.06) 100%);
+  border: 1px solid rgba(99,38,200,0.35);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.wompi-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(99,38,200,0.08), transparent);
+  opacity: 0; transition: opacity 0.35s;
+}
+.wompi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(99,38,200,0.2); }
+.wompi-card:hover::before { opacity: 1; }
+
+.wompi-logo-wrap {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.6rem; margin-bottom: 0.8rem;
+}
+.wompi-logo-icon {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #6326c8, #a855f7);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; color: #fff;
+  box-shadow: 0 0 20px rgba(99,38,200,0.5);
+}
+.wompi-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.3rem; font-weight: 900;
+  color: #fff; letter-spacing: 1px;
+}
+.wompi-logo-text span { color: #a855f7; }
+
+.wompi-card h3 { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; }
+.wompi-card > p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.2rem; line-height: 1.6; }
+
+.wompi-methods {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  justify-content: center; margin-bottom: 1.5rem;
+}
+.wompi-method {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(168,85,247,0.1);
+  border: 1px solid rgba(168,85,247,0.25);
+  border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600;
+  color: #c084fc;
+}
+.wompi-method i { font-size: 0.8rem; }
+
+.btn-wompi {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.75rem 1.8rem;
+  background: linear-gradient(135deg, #6326c8, #a855f7);
+  color: #fff;
+  border: none; border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 1px; cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+.btn-wompi:hover {
+  box-shadow: 0 0 30px rgba(99,38,200,0.6);
+  transform: translateY(-2px);
+}
+
+.wompi-sandbox-note {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  color: #fbbf24;
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 999px;
+  padding: 0.25rem 0.8rem;
 }
