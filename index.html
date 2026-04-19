@@ -58,6 +58,9 @@
     </nav>
   </header>
 
+  <!-- Overlay oscuro para menú mobile -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
   <!-- ========== HERO SECTION ========== -->
   <section id="inicio" class="hero">
     <!-- Canvas para partículas Three.js -->
@@ -400,24 +403,42 @@
 
         <!--
           ====================================================
-          INTEGRACIÓN REAL CON PSE:
-          Para conectar PSE realmente necesitas:
-          1. Registrarte en PayU, Epayco o similar (plataformas aliadas de PSE en Colombia)
-          2. Obtener tu API Key y Merchant ID
-          3. Usar su SDK: https://developers.payulatam.com/
-          4. Crear un endpoint en tu backend que reciba el pago y valide la respuesta
+          INTEGRACIÓN WOMPI (ACTIVA - Sandbox)
+          Tu llave pública: pub_test_QLfy3Qgr3xtBpxSHbb1aNakSudmGpEZz
+          Cuando Wompi apruebe tu cuenta cambia a la llave de producción.
+          El botón usa el widget oficial de Wompi (checkout.co)
           ====================================================
         -->
-        <div class="payment-card" data-aos="zoom-in" data-aos-delay="300">
-          <div class="payment-logo pse-logo">
-            <i class="fas fa-globe"></i>
+        <div class="payment-card wompi-card" data-aos="zoom-in" data-aos-delay="300">
+          <div class="wompi-logo-wrap">
+            <div class="wompi-logo-icon"><i class="fas fa-bolt"></i></div>
+            <span class="wompi-logo-text">wom<span>pi</span></span>
           </div>
-          <h3>PSE</h3>
-          <p>Pago seguro desde tu banco online</p>
-          <div class="payment-info">
-            <button class="btn-pse" onclick="alert('Integración PSE próximamente disponible')">
-              <i class="fas fa-lock"></i> Pagar con PSE
-            </button>
+          <h3>Pago en línea seguro</h3>
+          <p>Paga con tarjeta, PSE, Nequi o efectivo a través de Wompi — la pasarela de pagos de Bancolombia.</p>
+          <div class="wompi-methods">
+            <span class="wompi-method"><i class="fas fa-credit-card"></i> Tarjeta</span>
+            <span class="wompi-method"><i class="fas fa-university"></i> PSE</span>
+            <span class="wompi-method"><i class="fas fa-mobile-alt"></i> Nequi</span>
+            <span class="wompi-method"><i class="fas fa-money-bill"></i> Efecty</span>
+          </div>
+
+          <!-- Widget oficial Wompi — reemplaza currency y amount-in-cents según el servicio -->
+          <form id="wompiForm">
+            <script
+              src="https://checkout.wompi.co/widget.js"
+              data-render="button"
+              data-public-key="pub_test_QLfy3Qgr3xtBpxSHbb1aNakSudmGpEZz"
+              data-currency="COP"
+              data-amount-in-cents="5000000"
+              data-reference="ZONATECH-001"
+              data-signature:integrity=""
+              data-redirect-url="https://zonatechgeek.com/gracias"
+            ></script>
+          </form>
+
+          <div class="wompi-sandbox-note">
+            <i class="fas fa-flask"></i> Modo pruebas activo — aprobación pendiente
           </div>
         </div>
 
