@@ -13,8 +13,10 @@ function hideLoader() {
   const loader = document.getElementById('loader');
   if (!loader || loader.classList.contains('hidden')) return;
   loader.classList.add('hidden');
-  document.body.style.overflow = 'auto';
-  // Iniciar AOS si está disponible
+  // Solo quitar overflow si el menú móvil no está abierto
+  if (!document.getElementById('navLinks')?.classList.contains('open')) {
+    document.body.style.overflow = 'auto';
+  }
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 700, once: true, easing: 'ease-out-cubic', offset: 60 });
   }
@@ -73,44 +75,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* ============================================================
-   3. NAVBAR: scroll activo + menú mobile
+   3. NAVBAR: scroll activo + menú mobile + overlay
 ============================================================ */
 (function initNavbar() {
-  const header    = document.getElementById('header');
-  const toggle    = document.getElementById('navToggle');
-  const navLinks  = document.getElementById('navLinks');
-  const links     = navLinks.querySelectorAll('.nav-link');
+  const header  = document.getElementById('header');
+  const toggle  = document.getElementById('navToggle');
+  const navMenu = document.getElementById('navLinks');
+  const overlay = document.getElementById('navOverlay');
+  const links   = navMenu.querySelectorAll('.nav-link');
 
-  // Scroll → cambio de estilo del header
+  function openMenu() {
+    toggle.classList.add('open');
+    navMenu.classList.add('open');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // evita scroll del fondo
+  }
+
+  function closeMenu() {
+    toggle.classList.remove('open');
+    navMenu.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Hamburger toggle
+  toggle.addEventListener('click', () => {
+    navMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  // Cerrar al hacer clic en un enlace
+  links.forEach(link => link.addEventListener('click', closeMenu));
+
+  // Cerrar al hacer clic en el overlay
+  if (overlay) overlay.addEventListener('click', closeMenu);
+
+  // Cerrar con tecla Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Header scrolled
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 50);
     updateActiveLink();
   }, { passive: true });
 
-  // Hamburger menu toggle
-  toggle.addEventListener('click', () => {
-    toggle.classList.toggle('open');
-    navLinks.classList.toggle('open');
-  });
-
-  // Cerrar menú al hacer click en un enlace
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      toggle.classList.remove('open');
-      navLinks.classList.remove('open');
-    });
-  });
-
   // Marcar enlace activo según sección visible
   function updateActiveLink() {
     const sections = document.querySelectorAll('section[id]');
     let current = '';
-
     sections.forEach(sec => {
-      const top = sec.offsetTop - 100;
-      if (window.scrollY >= top) current = sec.getAttribute('id');
+      if (window.scrollY >= sec.offsetTop - 110) current = sec.getAttribute('id');
     });
-
     links.forEach(link => {
       const href = link.getAttribute('href')?.replace('#', '');
       link.classList.toggle('active', href === current);
