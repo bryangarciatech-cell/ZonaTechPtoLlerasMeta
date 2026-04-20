@@ -3,28 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZonaTech Geek | Soluciones Tecnológicas</title>
+  <meta name="description" content="ZonaTech Geek — Reparación de computadoras, mantenimiento, diseño gráfico, edición de video y soporte técnico profesional en Puerto Lleras, Meta, Colombia." />
+  <meta name="keywords" content="reparación computadoras, soporte técnico, diseño gráfico, edición video, Puerto Lleras, Meta, Colombia, mantenimiento PC" />
+  <meta name="author" content="ZonaTech Geek — Brayan Garcia" />
+  <meta name="theme-color" content="#050810" />
+  <!-- Open Graph -->
+  <meta property="og:title"       content="ZonaTech Geek | Soluciones Tecnológicas Premium" />
+  <meta property="og:description" content="Reparación, mantenimiento, diseño digital y soporte técnico profesional en Colombia." />
+  <meta property="og:type"        content="website" />
+  <meta property="og:image"       content="https://zonatechgeek.com/og-image.jpg" />
+  <title>ZonaTech Geek | Soluciones Tecnológicas Premium</title>
 
-  <!-- Google Fonts: Orbitron (display) + Rajdhani (body) -->
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-  <!-- Font Awesome Icons -->
+  <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- AOS Animations -->
+  <!-- AOS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-
-  <!-- Main CSS -->
+  <!-- Estilos -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- ========== CURSOR PERSONALIZADO ========== -->
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
+  <!-- Cursor personalizado (solo desktop) -->
+  <div class="cursor-dot"  aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
 
-  <!-- ========== LOADER ========== -->
-  <div id="loader">
+  <!-- ══════════════════════════════════════════════════
+       LOADER
+  ══════════════════════════════════════════════════ -->
+  <div id="loader" role="status" aria-label="Cargando sitio">
     <div class="loader-inner">
       <div class="loader-logo">ZT<span>G</span></div>
       <div class="loader-bar"><div class="loader-progress"></div></div>
@@ -32,47 +43,55 @@
     </div>
   </div>
 
-  <!-- ========== HEADER / NAV ========== -->
+  <!-- ══════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════ -->
   <header id="header">
-    <nav class="navbar">
-      <div class="nav-logo">
-        <span class="logo-icon"><i class="fas fa-microchip"></i></span>
-        <span class="logo-text">ZonaTech<span class="logo-accent">Geek</span></span>
-      </div>
+    <nav class="navbar" role="navigation" aria-label="Menú principal">
 
-      <!-- Hamburger para móvil -->
-      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+      <a href="#inicio" class="nav-logo" aria-label="ZonaTech Geek — Inicio">
+        <span class="logo-icon" aria-hidden="true"><i class="fas fa-microchip"></i></span>
+        <span class="logo-text">ZonaTech<span class="logo-accent">Geek</span></span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
         <span></span><span></span><span></span>
       </button>
 
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#inicio" class="nav-link">Inicio</a></li>
-        <li><a href="#servicios" class="nav-link">Servicios</a></li>
-        <li><a href="#precios" class="nav-link">Precios</a></li>
-        <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
-        <li><a href="#perfil" class="nav-link">Perfil</a></li>
-        <li><a href="#resenas" class="nav-link">Reseñas</a></li>
-        <li><a href="#contacto" class="nav-link">Contacto</a></li>
-        <li><a href="#cotizar" class="nav-link btn-nav-cta">Cotizar</a></li>
+      <ul class="nav-links" id="navLinks" role="menubar">
+        <li role="none"><a href="#inicio"    class="nav-link" role="menuitem">Inicio</a></li>
+        <li role="none"><a href="#servicios" class="nav-link" role="menuitem">Servicios</a></li>
+        <li role="none"><a href="#precios"   class="nav-link" role="menuitem">Precios</a></li>
+        <li role="none"><a href="#pagos"     class="nav-link" role="menuitem">Pagos</a></li>
+        <li role="none"><a href="#nosotros"  class="nav-link" role="menuitem">Nosotros</a></li>
+        <li role="none"><a href="#perfil"    class="nav-link" role="menuitem">Perfil</a></li>
+        <li role="none"><a href="#resenas"   class="nav-link" role="menuitem">Reseñas</a></li>
+        <li role="none"><a href="#contacto"  class="nav-link" role="menuitem">Contacto</a></li>
+        <li role="none">
+          <a href="#cotizar" class="nav-link btn-nav-cta" role="menuitem">
+            <i class="fas fa-bolt" aria-hidden="true"></i> Cotizar
+          </a>
+        </li>
       </ul>
+
     </nav>
   </header>
+  <!-- Overlay fondo oscuro menú mobile -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 
-  <!-- Overlay oscuro para menú mobile -->
-  <div class="nav-overlay" id="navOverlay"></div>
-
-  <!-- ========== HERO SECTION ========== -->
-  <section id="inicio" class="hero">
-    <!-- Canvas para partículas Three.js -->
-    <canvas id="heroCanvas"></canvas>
-
-    <!-- Grid de fondo animado -->
-    <div class="hero-grid"></div>
+  <!-- ══════════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════════ -->
+  <section id="inicio" class="hero" aria-label="Inicio">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="hero-grid"    aria-hidden="true"></div>
+    <div class="hero-ambient" aria-hidden="true"></div>
 
     <div class="hero-content">
       <div class="hero-badge" data-aos="fade-down" data-aos-delay="200">
-        <span class="badge-dot"></span>
-        <span>Servicios Tech Premium · Colombia</span>
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span>Servicios Tech Premium &middot; Puerto Lleras, Meta 🇨🇴</span>
       </div>
 
       <h1 class="hero-title" data-aos="fade-up" data-aos-delay="300">
@@ -83,45 +102,54 @@
 
       <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="450">
         Reparación, mantenimiento, diseño digital y soporte técnico profesional.<br />
-        Tu equipo en manos de expertos.
+        Tu equipo en manos de expertos reales.
       </p>
 
       <div class="hero-buttons" data-aos="fade-up" data-aos-delay="600">
-        <a href="#cotizar" class="btn btn-primary">
-          <i class="fas fa-bolt"></i> Solicitar Servicio
-        </a>
-        <a href="#servicios" class="btn btn-ghost">
-          <i class="fas fa-arrow-down"></i> Ver Servicios
-        </a>
+        <a href="#cotizar"   class="btn btn-primary"><i class="fas fa-bolt"       aria-hidden="true"></i> Solicitar Servicio</a>
+        <a href="#servicios" class="btn btn-ghost"  ><i class="fas fa-chevron-down" aria-hidden="true"></i> Ver Servicios</a>
       </div>
 
-      <!-- Stats -->
-      <div class="hero-stats" data-aos="fade-up" data-aos-delay="750">
+      <div class="hero-stats" data-aos="fade-up" data-aos-delay="750" aria-label="Estadísticas">
         <div class="stat">
-          <span class="stat-number" data-target="500">0</span><span class="stat-plus">+</span>
+          <div class="stat-row">
+            <span class="stat-number" data-target="500">0</span><span class="stat-plus">+</span>
+          </div>
           <p>Equipos reparados</p>
         </div>
-        <div class="stat-divider"></div>
+        <div class="stat-divider" aria-hidden="true"></div>
         <div class="stat">
-          <span class="stat-number" data-target="98">0</span><span class="stat-plus">%</span>
+          <div class="stat-row">
+            <span class="stat-number" data-target="98">0</span><span class="stat-plus">%</span>
+          </div>
           <p>Satisfacción</p>
         </div>
-        <div class="stat-divider"></div>
+        <div class="stat-divider" aria-hidden="true"></div>
         <div class="stat">
-          <span class="stat-number" data-target="5">0</span><span class="stat-plus">+</span>
-          <p>Años de experiencia</p>
+          <div class="stat-row">
+            <span class="stat-number" data-target="5">0</span><span class="stat-plus">+</span>
+          </div>
+          <p>Años exp.</p>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <div class="stat-row">
+            <span class="stat-number" data-target="300">0</span><span class="stat-plus">+</span>
+          </div>
+          <p>Clientes</p>
         </div>
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator">
+    <div class="scroll-indicator" aria-hidden="true">
       <div class="scroll-line"></div>
       <span>SCROLL</span>
     </div>
   </section>
 
-  <!-- ========== SERVICIOS ========== -->
+  <!-- ══════════════════════════════════════════════════
+       SERVICIOS
+  ══════════════════════════════════════════════════ -->
   <section id="servicios" class="section services-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -130,476 +158,420 @@
         <p class="section-desc">Soluciones integrales para tus necesidades tecnológicas y digitales.</p>
       </div>
 
-      <!-- Servicios Técnicos -->
-      <div class="services-category" data-aos="fade-up" data-aos-delay="100">
+      <!-- Técnicos -->
+      <div class="services-category" data-aos="fade-up">
         <div class="category-label">
-          <i class="fas fa-laptop-code"></i>
+          <i class="fas fa-laptop-code" aria-hidden="true"></i>
           <span>Servicios Técnicos</span>
         </div>
         <div class="services-grid">
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-tools"></i></div>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="50">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-tools" aria-hidden="true"></i></div>
             <h3>Reparación de Computadoras</h3>
             <p>Diagnóstico y reparación completa de laptops y PCs de escritorio.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="150">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-shield-halved"></i></div>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="100">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-shield-halved" aria-hidden="true"></i></div>
             <h3>Mantenimiento Preventivo</h3>
             <p>Limpieza, revisión y actualización para evitar fallas futuras.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-wrench"></i></div>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="150">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-wrench" aria-hidden="true"></i></div>
             <h3>Mantenimiento Correctivo</h3>
-            <p>Solución de fallas y errores que ya están afectando tu equipo.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="250">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+            <p>Solución de fallas y errores que ya afectan tu equipo.</p>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="200">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
             <h3>Mantenimiento Predictivo</h3>
             <p>Análisis de rendimiento para anticipar y prevenir problemas.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="300">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-bug-slash"></i></div>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="250">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-bug-slash" aria-hidden="true"></i></div>
             <h3>Eliminación de Virus</h3>
             <p>Limpieza total de malware, ransomware, spyware y troyanos.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="350">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-download"></i></div>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="300">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-download" aria-hidden="true"></i></div>
             <h3>Instalación de Software</h3>
             <p>Instalación, configuración y licenciamiento de programas.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="400">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-wifi"></i></div>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="350">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-wifi" aria-hidden="true"></i></div>
             <h3>Soporte Remoto</h3>
             <p>Asistencia técnica online, rápida y sin salir de tu casa.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="450">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-microchip"></i></div>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="400">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-microchip" aria-hidden="true"></i></div>
             <h3>Cambio de Piezas</h3>
             <p>Reemplazo de RAM, disco duro, pantalla, teclado y más.</p>
-          </div>
-
-          <div class="service-card" data-aos="zoom-in" data-aos-delay="500">
-            <div class="card-glow"></div>
-            <div class="service-icon"><i class="fas fa-print"></i></div>
-            <h3>Mantenimiento de Impresoras</h3>
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card" data-aos="zoom-in" data-aos-delay="450">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="service-icon"><i class="fas fa-print" aria-hidden="true"></i></div>
+            <h3>Mantenimiento Impresoras</h3>
             <p>Limpieza, reparación y configuración de impresoras.</p>
-          </div>
-
+            <a href="#cotizar" class="service-link">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
         </div>
       </div>
 
-      <!-- Servicios Digitales -->
-      <div class="services-category" data-aos="fade-up" data-aos-delay="100">
+      <!-- Digitales -->
+      <div class="services-category" data-aos="fade-up">
         <div class="category-label category-label--digital">
-          <i class="fas fa-palette"></i>
+          <i class="fas fa-palette" aria-hidden="true"></i>
           <span>Servicios Digitales</span>
         </div>
         <div class="services-grid">
-
-          <div class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="100">
-            <div class="card-glow card-glow--purple"></div>
-            <div class="service-icon service-icon--purple"><i class="fas fa-film"></i></div>
+          <article class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="50">
+            <div class="card-glow card-glow--purple" aria-hidden="true"></div>
+            <div class="service-icon service-icon--purple"><i class="fas fa-film" aria-hidden="true"></i></div>
             <h3>Edición de Video</h3>
             <p>Producción, corte, efectos y montaje de videos profesionales.</p>
-          </div>
-
-          <div class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="150">
-            <div class="card-glow card-glow--purple"></div>
-            <div class="service-icon service-icon--purple"><i class="fas fa-pen-nib"></i></div>
+            <a href="#cotizar" class="service-link service-link--purple">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="100">
+            <div class="card-glow card-glow--purple" aria-hidden="true"></div>
+            <div class="service-icon service-icon--purple"><i class="fas fa-pen-nib" aria-hidden="true"></i></div>
             <h3>Diseño Gráfico</h3>
             <p>Logos, banners, flyers, branding y material publicitario.</p>
-          </div>
-
-          <div class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="200">
-            <div class="card-glow card-glow--purple"></div>
-            <div class="service-icon service-icon--purple"><i class="fas fa-users-gear"></i></div>
+            <a href="#cotizar" class="service-link service-link--purple">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="150">
+            <div class="card-glow card-glow--purple" aria-hidden="true"></div>
+            <div class="service-icon service-icon--purple"><i class="fas fa-users-gear" aria-hidden="true"></i></div>
             <h3>Community Manager</h3>
             <p>Gestión estratégica de comunidades online y redes sociales.</p>
-          </div>
-
-          <div class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="250">
-            <div class="card-glow card-glow--purple"></div>
-            <div class="service-icon service-icon--purple"><i class="fas fa-hashtag"></i></div>
+            <a href="#cotizar" class="service-link service-link--purple">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="200">
+            <div class="card-glow card-glow--purple" aria-hidden="true"></div>
+            <div class="service-icon service-icon--purple"><i class="fas fa-hashtag" aria-hidden="true"></i></div>
             <h3>Manejo de Redes Sociales</h3>
             <p>Creación de contenido, estrategia y crecimiento digital.</p>
-          </div>
-
-          <div class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="300">
-            <div class="card-glow card-glow--purple"></div>
-            <div class="service-icon service-icon--purple"><i class="fas fa-wand-magic-sparkles"></i></div>
+            <a href="#cotizar" class="service-link service-link--purple">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="250">
+            <div class="card-glow card-glow--purple" aria-hidden="true"></div>
+            <div class="service-icon service-icon--purple"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i></div>
             <h3>Retoque Fotográfico</h3>
             <p>Edición profesional de imágenes con Photoshop y Lightroom.</p>
-          </div>
-
-          <div class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="350">
-            <div class="card-glow card-glow--purple"></div>
-            <div class="service-icon service-icon--purple"><i class="fas fa-camera"></i></div>
-            <h3>Fotografía</h3>
-            <p>Eventos, carnet, retratos y sesiones profesionales.<br/>
-            <small class="photo-note"><i class="fas fa-info-circle"></i> Las fotografías se entregan en formato digital</small></p>
-          </div>
-
+            <a href="#cotizar" class="service-link service-link--purple">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
+          <article class="service-card service-card--digital" data-aos="zoom-in" data-aos-delay="300">
+            <div class="card-glow card-glow--purple" aria-hidden="true"></div>
+            <div class="service-icon service-icon--purple"><i class="fas fa-camera" aria-hidden="true"></i></div>
+            <h3>Fotografía Profesional</h3>
+            <p>Eventos, carnet y retratos.
+              <span class="photo-note"><i class="fas fa-info-circle" aria-hidden="true"></i> Entrega en formato digital</span>
+            </p>
+            <a href="#cotizar" class="service-link service-link--purple">Solicitar <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+          </article>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== PRECIOS ========== -->
+  <!-- ══════════════════════════════════════════════════
+       PRECIOS
+  ══════════════════════════════════════════════════ -->
   <section id="precios" class="section pricing-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="section-tag">// PRECIOS</span>
         <h2 class="section-title">Tarifas <span class="text-gradient">Competitivas</span></h2>
-        <p class="section-desc">Precios justos y transparentes. Sin sorpresas.</p>
+        <p class="section-desc">Precios justos y transparentes. Sin letras pequeñas.</p>
       </div>
 
       <div class="pricing-grid">
-
         <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="pricing-icon"><i class="fas fa-shield-halved"></i></div>
+          <div class="pricing-icon"><i class="fas fa-shield-halved" aria-hidden="true"></i></div>
           <h3>Mantenimiento Básico</h3>
-          <div class="price">
-            <span class="currency">Desde$</span>
-            <span class="amount">60.999</span>
-            <span class="period">COP</span>
-          </div>
+          <div class="price"><span class="currency">Desde $</span><span class="amount">60.999</span><span class="period">COP</span></div>
           <ul class="pricing-features">
-            <li><i class="fas fa-check"></i> Limpieza física interna</li>
-            <li><i class="fas fa-check"></i> Limpieza de registro</li>
-            <li><i class="fas fa-check"></i> Actualización de sistema</li>
-            <li><i class="fas fa-check"></i> Revisión general y instalacion de aplicativos</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Limpieza física interna</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Limpieza de registro</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Actualización del sistema</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Revisión e instalación de apps</li>
           </ul>
           <a href="#cotizar" class="btn btn-pricing">Solicitar</a>
         </div>
 
         <div class="pricing-card pricing-featured" data-aos="fade-up" data-aos-delay="200">
           <div class="featured-badge">⚡ MÁS POPULAR</div>
-          <div class="pricing-icon"><i class="fas fa-bug-slash"></i></div>
-          <h3>Análisis y Eliminación de Virus</h3>
-          <div class="price">
-            <span class="currency">Desde$</span>
-            <span class="amount">25.999</span>
-            <span class="period">COP</span>
-          </div>
+          <div class="pricing-icon"><i class="fas fa-bug-slash" aria-hidden="true"></i></div>
+          <h3>Eliminación de Virus</h3>
+          <div class="price"><span class="currency">Desde $</span><span class="amount">25.999</span><span class="period">COP</span></div>
           <ul class="pricing-features">
-            <li><i class="fas fa-check"></i> Análisis completo</li>
-            <li><i class="fas fa-check"></i> Eliminación de malware</li>
-            <li><i class="fas fa-check"></i> Optimización post-limpieza</li>
-            <li><i class="fas fa-check"></i> Instalación de antivirus</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Análisis completo del sistema</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Eliminación de malware</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Optimización post-limpieza</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Instalación de antivirus</li>
           </ul>
           <a href="#cotizar" class="btn btn-primary">Solicitar</a>
         </div>
 
         <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
-          <div class="pricing-icon"><i class="fas fa-download"></i></div>
+          <div class="pricing-icon"><i class="fas fa-download" aria-hidden="true"></i></div>
           <h3>Instalación de Software</h3>
-          <div class="price">
-            <span class="currency">Desde$</span>
-            <span class="amount">20.999</span>
-            <span class="period">COP</span>
-          </div>
+          <div class="price"><span class="currency">Desde $</span><span class="amount">20.999</span><span class="period">COP</span></div>
           <ul class="pricing-features">
-            <li><i class="fas fa-check"></i> Instalación completa</li>
-            <li><i class="fas fa-check"></i> Configuración inicial</li>
-            <li><i class="fas fa-check"></i> Activación de licencia</li>
-            <li><i class="fas fa-check"></i> Soporte post-instalación</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Instalación completa</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Configuración inicial</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Activación de licencia</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Soporte post-instalación</li>
           </ul>
           <a href="#cotizar" class="btn btn-pricing">Solicitar</a>
         </div>
 
         <div class="pricing-card" data-aos="fade-up" data-aos-delay="400">
-          <div class="pricing-icon"><i class="fas fa-film"></i></div>
+          <div class="pricing-icon"><i class="fas fa-film" aria-hidden="true"></i></div>
           <h3>Edición de Video</h3>
-          <div class="price">
-            <span class="currency">Desde$</span>
-            <span class="amount">35.999</span>
-            <span class="period">COP</span>
-          </div>
+          <div class="price"><span class="currency">Desde $</span><span class="amount">35.999</span><span class="period">COP</span></div>
           <ul class="pricing-features">
-            <li><i class="fas fa-check"></i> Montaje y corte</li>
-            <li><i class="fas fa-check"></i> Efectos visuales</li>
-            <li><i class="fas fa-check"></i> Corrección de color</li>
-            <li><i class="fas fa-check"></i> Audio y música</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Montaje y corte profesional</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Efectos visuales</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Corrección de color</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Audio y música de fondo</li>
           </ul>
           <a href="#cotizar" class="btn btn-pricing">Solicitar</a>
         </div>
 
         <div class="pricing-card" data-aos="fade-up" data-aos-delay="500">
-          <div class="pricing-icon"><i class="fas fa-pen-nib"></i></div>
+          <div class="pricing-icon"><i class="fas fa-pen-nib" aria-hidden="true"></i></div>
           <h3>Diseño Gráfico</h3>
-          <div class="price">
-            <span class="currency">Desde$</span>
-            <span class="amount">35.999</span>
-            <span class="period">COP</span>
-          </div>
+          <div class="price"><span class="currency">Desde $</span><span class="amount">35.999</span><span class="period">COP</span></div>
           <ul class="pricing-features">
-            <li><i class="fas fa-check"></i> Diseño personalizado</li>
-            <li><i class="fas fa-check"></i> Revisiones incluidas</li>
-            <li><i class="fas fa-check"></i> Formatos PNG/PDF/SVG</li>
-            <li><i class="fas fa-check"></i> Entrega rápida</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Diseño 100% personalizado</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Revisiones incluidas</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Formatos PNG / PDF / SVG</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Entrega express</li>
           </ul>
           <a href="#cotizar" class="btn btn-pricing">Solicitar</a>
         </div>
-
       </div>
 
       <p class="pricing-note" data-aos="fade-up" data-aos-delay="600">
-        <i class="fas fa-info-circle"></i>
+        <i class="fas fa-info-circle" aria-hidden="true"></i>
         Precios referenciales. Servicios complejos requieren cotización personalizada.
       </p>
     </div>
   </section>
 
-  <!-- ========== MÉTODOS DE PAGO ========== -->
-  <section class="section payment-section">
+  <!-- ══════════════════════════════════════════════════
+       MÉTODOS DE PAGO
+  ══════════════════════════════════════════════════ -->
+  <section id="pagos" class="section payment-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="section-tag">// PAGOS</span>
         <h2 class="section-title">Métodos de <span class="text-gradient">Pago</span></h2>
-        <p class="section-desc">Paga de forma fácil y segura con tus medios favoritos.</p>
+        <p class="section-desc">Múltiples opciones seguras y rápidas para tu comodidad.</p>
       </div>
 
       <div class="payment-grid">
-
+        <!-- Nequi -->
         <div class="payment-card" data-aos="zoom-in" data-aos-delay="100">
-          <div class="payment-logo nequi-logo">
-            <i class="fas fa-mobile-screen-button"></i>
-          </div>
+          <div class="payment-logo nequi-logo"><i class="fas fa-mobile-screen-button" aria-hidden="true"></i></div>
           <h3>Nequi</h3>
           <p>Transferencia directa por Nequi</p>
           <div class="payment-info">
-            <span class="payment-number">📱 Número: <strong>317 289 8993</strong></span>
-            <small><!-- REEMPLAZAR CON TU NÚMERO REAL --></small>
+            <button class="payment-copy-btn" data-copy="3172898993" aria-label="Copiar número Nequi">
+              <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+              <span>317 289 8993</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
 
+        <!-- Bancolombia -->
         <div class="payment-card" data-aos="zoom-in" data-aos-delay="200">
-          <div class="payment-logo bancolombia-logo">
-            <i class="fas fa-building-columns"></i>
-          </div>
+          <div class="payment-logo bancolombia-logo"><i class="fas fa-building-columns" aria-hidden="true"></i></div>
           <h3>Bancolombia</h3>
-          <p>Transferencia o depósito bancario</p>
+          <p>Transferencia o Botón Bre-B</p>
           <div class="payment-info">
-            <span class="payment-number">🏦 Llave Bre-B: <strong>@brayan3058</strong></span>
-            <small><!-- REEMPLAZAR CON TU CUENTA REAL --></small>
+            <button class="payment-copy-btn" data-copy="@brayan3058" aria-label="Copiar llave Bancolombia">
+              <i class="fas fa-key" aria-hidden="true"></i>
+              <span>@brayan3058</span>
+              <i class="fas fa-copy copy-icon" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
 
         <!--
-          ====================================================
-          INTEGRACIÓN WOMPI (ACTIVA - Sandbox)
-          Tu llave pública: pub_test_QLfy3Qgr3xtBpxSHbb1aNakSudmGpEZz
-          Cuando Wompi apruebe tu cuenta cambia a la llave de producción.
-          El botón usa el widget oficial de Wompi (checkout.co)
-          ====================================================
+          ════════════════════════════════════════════════════
+          WOMPI — Integración activa (Sandbox)
+          Llave pública: pub_test_QLfy3Qgr3xtBpxSHbb1aNakSudmGpEZz
+          Link directo:  https://checkout.wompi.co/l/test_VPOS_CCycdV
+          
+          Para PRODUCCIÓN:
+          1. Espera aprobación de Wompi
+          2. Cambia la URL al link de producción que te genere Wompi
+          3. Para el widget embed, genera el integrity hash con tu llave privada
+          ════════════════════════════════════════════════════
         -->
         <div class="payment-card wompi-card" data-aos="zoom-in" data-aos-delay="300">
           <div class="wompi-logo-wrap">
-            <div class="wompi-logo-icon"><i class="fas fa-bolt"></i></div>
+            <div class="wompi-logo-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
             <span class="wompi-logo-text">wom<span>pi</span></span>
           </div>
-          <h3>Pago en línea seguro</h3>
-          <p>Paga con tarjeta, PSE, Nequi o efectivo a través de Wompi — la pasarela de pagos de Bancolombia.</p>
+          <h3>Pago en Línea Seguro</h3>
+          <p>Tarjeta, PSE, Nequi o Efecty — pasarela oficial de Bancolombia.</p>
           <div class="wompi-methods">
-            <span class="wompi-method"><i class="fas fa-credit-card"></i> Tarjeta</span>
-            <span class="wompi-method"><i class="fas fa-university"></i> PSE</span>
-            <span class="wompi-method"><i class="fas fa-mobile-alt"></i> Nequi</span>
-            <span class="wompi-method"><i class="fas fa-money-bill"></i> Efecty</span>
+            <span class="wompi-method"><i class="fas fa-credit-card" aria-hidden="true"></i> Tarjeta</span>
+            <span class="wompi-method"><i class="fas fa-university" aria-hidden="true"></i> PSE</span>
+            <span class="wompi-method"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Nequi</span>
+            <span class="wompi-method"><i class="fas fa-money-bill" aria-hidden="true"></i> Efecty</span>
           </div>
-
-          <!-- Widget oficial Wompi — reemplaza currency y amount-in-cents según el servicio -->
-          <form id="wompiForm">
-            <script
-              src="https://checkout.wompi.co/widget.js"
-              data-render="button"
-              data-public-key="pub_test_QLfy3Qgr3xtBpxSHbb1aNakSudmGpEZz"
-              data-currency="COP"
-              data-amount-in-cents="5000000"
-              data-reference="ZONATECH-001"
-              data-signature:integrity=""
-              data-redirect-url="https://zonatechgeek.com/gracias"
-            ></script>
-          </form>
-
+          <a href="https://checkout.wompi.co/l/test_VPOS_CCycdV" target="_blank" rel="noopener noreferrer" class="btn-wompi">
+            <i class="fas fa-lock" aria-hidden="true"></i> Pagar con Wompi
+          </a>
           <div class="wompi-sandbox-note">
-            <i class="fas fa-flask"></i> Modo pruebas activo — aprobación pendiente
+            <i class="fas fa-flask" aria-hidden="true"></i> Modo pruebas — aprobación pendiente
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ========== NOSOTROS ========== -->
+  <!-- ══════════════════════════════════════════════════
+       NOSOTROS
+  ══════════════════════════════════════════════════ -->
   <section id="nosotros" class="section about-section">
     <div class="container">
       <div class="about-grid">
         <div class="about-text" data-aos="fade-right">
           <span class="section-tag">// NOSOTROS</span>
           <h2 class="section-title">Tecnología con<br /><span class="text-gradient">Propósito</span></h2>
-          <p>Somos <strong>ZonaTech Geek</strong>, un emprendimiento colombiano del sur del META, apasionado por la tecnología. Nacimos para ofrecer soluciones técnicas y digitales de calidad a empresas y personas que quieren sacarle el máximo provecho a sus dispositivos y presencia digital.</p>
+          <p>Somos <strong>ZonaTech Geek</strong>, un emprendimiento colombiano del sur del Meta, apasionado por la tecnología. Nacimos para ofrecer soluciones técnicas y digitales de calidad a empresas y personas que quieren sacarle el máximo provecho a sus dispositivos y presencia digital.</p>
           <p>Nos diferenciamos por nuestra <strong>rapidez, honestidad y profesionalismo</strong>. No hay problema técnico ni proyecto digital demasiado grande o pequeño para nuestro equipo.</p>
           <div class="about-features">
-            <div class="about-feat">
-              <i class="fas fa-bolt"></i>
-              <span>Respuesta rápida</span>
-            </div>
-            <div class="about-feat">
-              <i class="fas fa-star"></i>
-              <span>Calidad garantizada</span>
-            </div>
-            <div class="about-feat">
-              <i class="fas fa-headset"></i>
-              <span>Soporte post-servicio</span>
-            </div>
-            <div class="about-feat">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Puerto Lleras Meta</span>
-            </div>
+            <div class="about-feat"><i class="fas fa-bolt" aria-hidden="true"></i><span>Respuesta rápida</span></div>
+            <div class="about-feat"><i class="fas fa-star" aria-hidden="true"></i><span>Calidad garantizada</span></div>
+            <div class="about-feat"><i class="fas fa-headset" aria-hidden="true"></i><span>Soporte post-servicio</span></div>
+            <div class="about-feat"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Puerto Lleras, Meta</span></div>
           </div>
         </div>
-        <div class="about-visual" data-aos="fade-left" data-aos-delay="200">
+        <div class="about-visual" data-aos="fade-left" data-aos-delay="200" aria-hidden="true">
           <div class="about-card-3d">
             <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
             <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
             <div class="orbit orbit-3"><div class="orbit-dot"></div></div>
-            <div class="about-core">
-              <i class="fas fa-microchip"></i>
-              <span>ZTG</span>
-            </div>
+            <div class="about-core"><i class="fas fa-microchip"></i><span>ZTG</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== PERFIL PROFESIONAL ========== -->
+  <!-- ══════════════════════════════════════════════════
+       PERFIL PROFESIONAL
+  ══════════════════════════════════════════════════ -->
   <section id="perfil" class="section profile-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
-        <span class="section-tag">// QUIÉN NOS LIDERA</span>
-        <h2 class="section-title">El <span class="text-gradient">Fundador</span></h2>
-        <p class="section-desc">Conoce la persona detrás de ZonaTech Geek.</p>
+        <span class="section-tag">// FUNDADOR</span>
+        <h2 class="section-title">El <span class="text-gradient">Equipo</span></h2>
+        <p class="section-desc">Conoce a la persona detrás de ZonaTech Geek.</p>
       </div>
 
       <div class="profile-card-wrap" data-aos="fade-up" data-aos-delay="150">
         <div class="profile-card">
+          <div class="profile-bg-glow" aria-hidden="true"></div>
 
-          <!-- Fondo decorativo -->
-          <div class="profile-bg-glow"></div>
-
-          <!-- Foto de perfil -->
           <div class="profile-photo-wrap">
-            <div class="profile-photo-ring profile-photo-ring--1"></div>
-            <div class="profile-photo-ring profile-photo-ring--2"></div>
-            <!-- Avatar SVG futurista — reemplaza el src con tu foto real -->
-            <div class="profile-photo" id="profilePhoto">
-              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="160" height="160">
+            <div class="profile-photo-ring profile-photo-ring--1" aria-hidden="true"></div>
+            <div class="profile-photo-ring profile-photo-ring--2" aria-hidden="true"></div>
+
+            <!--
+              ════════════════════════════════════════════════
+              Para poner tu foto real, reemplaza todo el SVG por:
+              <img src="tu-foto.jpg" alt="Brayan Garcia — ZonaTech Geek"
+                   style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+              ════════════════════════════════════════════════
+            -->
+            <div class="profile-photo" aria-label="Foto de Brayan Garcia, fundador de ZonaTech Geek">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="160" height="160" aria-hidden="true">
                 <defs>
                   <linearGradient id="pg1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#0b1223"/>
-                    <stop offset="100%" style="stop-color:#080d1a"/>
+                    <stop offset="0%" stop-color="#0b1223"/>
+                    <stop offset="100%" stop-color="#080d1a"/>
                   </linearGradient>
                   <linearGradient id="pg2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#00d4ff"/>
-                    <stop offset="100%" style="stop-color:#a855f7"/>
+                    <stop offset="0%" stop-color="#00d4ff"/>
+                    <stop offset="100%" stop-color="#a855f7"/>
                   </linearGradient>
-                  <clipPath id="circle-clip">
-                    <circle cx="100" cy="100" r="97"/>
-                  </clipPath>
+                  <clipPath id="cc"><circle cx="100" cy="100" r="97"/></clipPath>
                 </defs>
-                <!-- Fondo -->
                 <circle cx="100" cy="100" r="100" fill="url(#pg1)"/>
-                <!-- Cuerpo / torso (camisa/camiseta tipo tech) -->
-                <ellipse cx="100" cy="175" rx="62" ry="42" fill="#0d1a2f" clip-path="url(#circle-clip)"/>
-                <ellipse cx="100" cy="165" rx="50" ry="30" fill="#0f2040" clip-path="url(#circle-clip)"/>
-                <!-- Detalle camisa — líneas tech -->
-                <line x1="100" y1="148" x2="100" y2="200" stroke="#00d4ff" stroke-width="1.5" opacity="0.4" clip-path="url(#circle-clip)"/>
-                <rect x="84" y="148" width="32" height="5" rx="2" fill="#00d4ff" opacity="0.25" clip-path="url(#circle-clip)"/>
-                <!-- Cuello -->
+                <ellipse cx="100" cy="175" rx="62" ry="42" fill="#0d1a2f" clip-path="url(#cc)"/>
+                <ellipse cx="100" cy="165" rx="50" ry="30" fill="#0f2040" clip-path="url(#cc)"/>
+                <line x1="100" y1="148" x2="100" y2="200" stroke="#00d4ff" stroke-width="1.5" opacity="0.4" clip-path="url(#cc)"/>
+                <rect x="84" y="148" width="32" height="5" rx="2" fill="#00d4ff" opacity="0.25" clip-path="url(#cc)"/>
                 <ellipse cx="100" cy="148" rx="16" ry="8" fill="#c9a47a"/>
-                <!-- Cabeza -->
                 <ellipse cx="100" cy="105" rx="38" ry="42" fill="#c9a47a"/>
-                <!-- Cabello -->
                 <ellipse cx="100" cy="68" rx="38" ry="18" fill="#2a1a0a"/>
-                <ellipse cx="68"  cy="82" rx="10" ry="16" fill="#2a1a0a"/>
+                <ellipse cx="68" cy="82" rx="10" ry="16" fill="#2a1a0a"/>
                 <ellipse cx="132" cy="82" rx="10" ry="16" fill="#2a1a0a"/>
-                <!-- Cejas -->
                 <path d="M82 94 Q90 89 98 93" stroke="#2a1a0a" stroke-width="3" fill="none" stroke-linecap="round"/>
                 <path d="M102 93 Q110 89 118 94" stroke="#2a1a0a" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <!-- Ojos -->
-                <ellipse cx="90"  cy="100" rx="7" ry="8" fill="#fff"/>
+                <ellipse cx="90" cy="100" rx="7" ry="8" fill="#fff"/>
                 <ellipse cx="110" cy="100" rx="7" ry="8" fill="#fff"/>
-                <circle  cx="91"  cy="101" r="4" fill="#1a0a00"/>
-                <circle  cx="111" cy="101" r="4" fill="#1a0a00"/>
-                <circle  cx="92"  cy="99"  r="1.5" fill="#fff"/>
-                <circle  cx="112" cy="99"  r="1.5" fill="#fff"/>
-                <!-- Nariz -->
+                <circle cx="91" cy="101" r="4" fill="#1a0a00"/>
+                <circle cx="111" cy="101" r="4" fill="#1a0a00"/>
+                <circle cx="92" cy="99" r="1.5" fill="#fff"/>
+                <circle cx="112" cy="99" r="1.5" fill="#fff"/>
                 <path d="M97 108 Q100 116 103 108" stroke="#b08060" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Boca (sonrisa) -->
                 <path d="M88 122 Q100 131 112 122" stroke="#8a5030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <!-- Gafas tech / lentes -->
-                <rect x="79" y="93" width="22" height="16" rx="5" fill="none" stroke="url(#pg2)" stroke-width="2" opacity="0.8"/>
-                <rect x="99" y="93" width="22" height="16" rx="5" fill="none" stroke="url(#pg2)" stroke-width="2" opacity="0.8"/>
-                <line x1="101" y1="101" x2="99"  y2="101" stroke="url(#pg2)" stroke-width="2"/>
-                <line x1="77"  y1="101" x2="72"  y2="99"  stroke="url(#pg2)" stroke-width="2"/>
-                <line x1="123" y1="101" x2="128" y2="99"  stroke="url(#pg2)" stroke-width="2"/>
-                <!-- Brillo en gafas -->
+                <rect x="79" y="93" width="22" height="16" rx="5" fill="none" stroke="url(#pg2)" stroke-width="2" opacity="0.85"/>
+                <rect x="99" y="93" width="22" height="16" rx="5" fill="none" stroke="url(#pg2)" stroke-width="2" opacity="0.85"/>
+                <line x1="101" y1="101" x2="99" y2="101" stroke="url(#pg2)" stroke-width="2"/>
+                <line x1="77" y1="101" x2="72" y2="99" stroke="url(#pg2)" stroke-width="2"/>
+                <line x1="123" y1="101" x2="128" y2="99" stroke="url(#pg2)" stroke-width="2"/>
                 <rect x="82" y="96" width="6" height="3" rx="1" fill="#00d4ff" opacity="0.3"/>
                 <rect x="102" y="96" width="6" height="3" rx="1" fill="#a855f7" opacity="0.3"/>
-                <!-- Borde del círculo con gradiente neon -->
                 <circle cx="100" cy="100" r="97" fill="none" stroke="url(#pg2)" stroke-width="3" opacity="0.6"/>
               </svg>
             </div>
-            <div class="profile-online-dot"></div>
+            <div class="profile-online-dot" title="Disponible ahora"></div>
           </div>
 
-          <!-- Info del perfil -->
           <div class="profile-info">
             <div class="profile-name-wrap">
-              <h2 class="profile-name">Ing. Brayan Estiben Rodriguez Garcia</h2>
-              <div class="profile-verified"><i class="fas fa-circle-check"></i> Verificado</div>
+              <h2 class="profile-name">Brayan Estiben Rodriguez Garcia</h2>
+              <div class="profile-verified"><i class="fas fa-circle-check" aria-hidden="true"></i> Verificado</div>
             </div>
-            <p class="profile-title">
-              <i class="fas fa-microchip"></i>
-              Fundador & Ing. Sistemas · ZonaTech Geek
-            </p>
-            <p class="profile-location">
-              <i class="fas fa-map-marker-alt"></i>
-              Puerto Lleras, Meta · Colombia 🇨🇴
-            </p>
+            <p class="profile-title"><i class="fas fa-microchip" aria-hidden="true"></i> Fundador &amp; Téc. en Sistemas · ZonaTech Geek</p>
+            <p class="profile-location"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Puerto Lleras, Meta · Colombia 🇨🇴</p>
 
             <p class="profile-bio">
-              Apasionado por la tecnología desde pequeño, fundé <strong>ZonaTech Geek</strong> con la misión de llevar soluciones tecnológicas de calidad a cada rincón del país. Con formación en sistemas y más de 5 años de experiencia en reparación, soporte técnico y producción digital, me especializo en dar vida a proyectos que combinan tecnología y creatividad.
+              Apasionado por la tecnología desde niño, fundé <strong>ZonaTech Geek</strong> con la misión de llevar soluciones digitales de calidad a cada rincón del país. Con más de 5 años de experiencia en reparación, soporte técnico y producción creativa, combino tecnología y diseño para resultados reales.
             </p>
 
-            <!-- Habilidades / Skills -->
             <div class="profile-skills">
-              <div class="skill-tag"><i class="fas fa-laptop-code"></i> Reparación de equipos</div>
-              <div class="skill-tag"><i class="fas fa-shield-halved"></i> Seguridad informática</div>
-              <div class="skill-tag"><i class="fas fa-pen-nib"></i> Diseño gráfico</div>
-              <div class="skill-tag"><i class="fas fa-film"></i> Edición de video</div>
-              <div class="skill-tag"><i class="fas fa-hashtag"></i> Marketing digital</div>
-              <div class="skill-tag"><i class="fas fa-wifi"></i> Soporte remoto</div>
+              <div class="skill-tag"><i class="fas fa-laptop-code" aria-hidden="true"></i> Reparación</div>
+              <div class="skill-tag"><i class="fas fa-shield-halved" aria-hidden="true"></i> Seguridad</div>
+              <div class="skill-tag"><i class="fas fa-pen-nib" aria-hidden="true"></i> Diseño Gráfico</div>
+              <div class="skill-tag"><i class="fas fa-film" aria-hidden="true"></i> Edición Video</div>
+              <div class="skill-tag"><i class="fas fa-hashtag" aria-hidden="true"></i> Marketing Digital</div>
+              <div class="skill-tag"><i class="fas fa-wifi" aria-hidden="true"></i> Soporte Remoto</div>
             </div>
 
-            <!-- Barras de habilidades -->
             <div class="profile-bars">
               <div class="profile-bar-item">
                 <div class="profile-bar-label"><span>Soporte Técnico</span><span>95%</span></div>
@@ -614,28 +586,28 @@
                 <div class="profile-bar-track"><div class="profile-bar-fill" data-width="80"></div></div>
               </div>
               <div class="profile-bar-item">
-                <div class="profile-bar-label"><span>Redes Sociales</span><span>88%</span></div>
+                <div class="profile-bar-label"><span>Marketing Digital</span><span>88%</span></div>
                 <div class="profile-bar-track"><div class="profile-bar-fill" data-width="88"></div></div>
               </div>
             </div>
 
-            <!-- Acciones del perfil -->
             <div class="profile-actions">
-              <a href="https://wa.me/573172898993" target="_blank" class="btn btn-primary">
-                <i class="fab fa-whatsapp"></i> Contactar ahora
+              <a href="https://wa.me/573172898993" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i> Contactar
               </a>
               <a href="#cotizar" class="btn btn-ghost">
-                <i class="fas fa-file-invoice"></i> Solicitar servicio
+                <i class="fas fa-file-invoice" aria-hidden="true"></i> Cotizar
               </a>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== EXPERIENCIA / TRAYECTORIA ========== -->
+  <!-- ══════════════════════════════════════════════════
+       EXPERIENCIA / TRAYECTORIA
+  ══════════════════════════════════════════════════ -->
   <section class="section experience-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -644,347 +616,293 @@
         <p class="section-desc">Años de trabajo, aprendizaje y clientes satisfechos nos respaldan.</p>
       </div>
 
-      <!-- Mega Stats -->
       <div class="exp-stats" data-aos="fade-up" data-aos-delay="100">
         <div class="exp-stat-card">
-          <div class="exp-stat-icon"><i class="fas fa-calendar-check"></i></div>
-          <span class="exp-stat-num" data-target="5">0</span><span class="exp-stat-suf">+</span>
+          <div class="exp-stat-icon"><i class="fas fa-calendar-check" aria-hidden="true"></i></div>
+          <div class="exp-stat-row"><span class="exp-stat-num" data-target="5">0</span><span class="exp-stat-suf">+</span></div>
           <p>Años de experiencia</p>
         </div>
         <div class="exp-stat-card">
-          <div class="exp-stat-icon"><i class="fas fa-users"></i></div>
-          <span class="exp-stat-num" data-target="300">0</span><span class="exp-stat-suf">+</span>
+          <div class="exp-stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+          <div class="exp-stat-row"><span class="exp-stat-num" data-target="300">0</span><span class="exp-stat-suf">+</span></div>
           <p>Clientes atendidos</p>
         </div>
         <div class="exp-stat-card">
-          <div class="exp-stat-icon"><i class="fas fa-laptop"></i></div>
-          <span class="exp-stat-num" data-target="500">0</span><span class="exp-stat-suf">+</span>
+          <div class="exp-stat-icon"><i class="fas fa-laptop" aria-hidden="true"></i></div>
+          <div class="exp-stat-row"><span class="exp-stat-num" data-target="500">0</span><span class="exp-stat-suf">+</span></div>
           <p>Equipos reparados</p>
         </div>
         <div class="exp-stat-card">
-          <div class="exp-stat-icon"><i class="fas fa-star"></i></div>
-          <span class="exp-stat-num" data-target="98">0</span><span class="exp-stat-suf">%</span>
-          <p>Satisfacción</p>
+          <div class="exp-stat-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
+          <div class="exp-stat-row"><span class="exp-stat-num" data-target="98">0</span><span class="exp-stat-suf">%</span></div>
+          <p>Satisfacción cliente</p>
         </div>
         <div class="exp-stat-card">
-          <div class="exp-stat-icon"><i class="fas fa-clock"></i></div>
-          <span class="exp-stat-num" data-target="24">0</span><span class="exp-stat-suf">h</span>
-          <p>Respuesta máxima</p>
+          <div class="exp-stat-icon"><i class="fas fa-clock" aria-hidden="true"></i></div>
+          <div class="exp-stat-row"><span class="exp-stat-num" data-target="24">0</span><span class="exp-stat-suf">h</span></div>
+          <p>Tiempo máx. respuesta</p>
         </div>
         <div class="exp-stat-card">
-          <div class="exp-stat-icon"><i class="fas fa-award"></i></div>
-          <span class="exp-stat-num" data-target="15">0</span><span class="exp-stat-suf">+</span>
+          <div class="exp-stat-icon"><i class="fas fa-award" aria-hidden="true"></i></div>
+          <div class="exp-stat-row"><span class="exp-stat-num" data-target="15">0</span><span class="exp-stat-suf">+</span></div>
           <p>Servicios ofrecidos</p>
         </div>
       </div>
 
-      <!-- Timeline -->
       <div class="timeline" data-aos="fade-up" data-aos-delay="200">
-        <div class="timeline-line"></div>
+        <div class="timeline-line" aria-hidden="true"></div>
 
         <div class="timeline-item timeline-left" data-aos="fade-right" data-aos-delay="100">
-          <div class="timeline-dot"><i class="fas fa-rocket"></i></div>
+          <div class="timeline-dot" aria-hidden="true"><i class="fas fa-rocket"></i></div>
           <div class="timeline-card">
             <span class="timeline-year">2021</span>
             <h3>Nace ZonaTech Geek</h3>
-            <p>Comenzamos con reparación de computadoras y soporte técnico en nuestra ciudad, con pasión por la tecnología y ganas de crecer.</p>
+            <p>Comenzamos con reparación de computadoras y soporte técnico local, con pasión por la tecnología.</p>
           </div>
         </div>
 
         <div class="timeline-item timeline-right" data-aos="fade-left" data-aos-delay="150">
-          <div class="timeline-dot timeline-dot--purple"><i class="fas fa-expand"></i></div>
+          <div class="timeline-dot timeline-dot--purple" aria-hidden="true"><i class="fas fa-expand"></i></div>
           <div class="timeline-card">
             <span class="timeline-year">2022</span>
-            <h3>Expansión de servicios</h3>
-            <p>Incorporamos servicios de diseño gráfico, edición de video y manejo de redes sociales para ampliar nuestro portafolio digital.</p>
+            <h3>Expansión de Servicios</h3>
+            <p>Incorporamos diseño gráfico, edición de video y manejo de redes para ampliar el portafolio digital.</p>
           </div>
         </div>
 
         <div class="timeline-item timeline-left" data-aos="fade-right" data-aos-delay="200">
-          <div class="timeline-dot timeline-dot--green"><i class="fas fa-wifi"></i></div>
+          <div class="timeline-dot timeline-dot--green" aria-hidden="true"><i class="fas fa-wifi"></i></div>
           <div class="timeline-card">
             <span class="timeline-year">2023</span>
             <h3>Soporte Remoto 24/7</h3>
-            <p>Lanzamos nuestra modalidad de soporte remoto para atender clientes en todo Colombia sin importar la distancia.</p>
+            <p>Lanzamos atención remota para clientes en todo Colombia sin importar la distancia.</p>
           </div>
         </div>
 
         <div class="timeline-item timeline-right" data-aos="fade-left" data-aos-delay="250">
-          <div class="timeline-dot"><i class="fas fa-star"></i></div>
+          <div class="timeline-dot" aria-hidden="true"><i class="fas fa-star"></i></div>
           <div class="timeline-card">
             <span class="timeline-year">2024 – 2025</span>
-            <h3>+200 clientes satisfechos</h3>
-            <p>Alcanzamos un hito importante: más de 200 clientes atendidos y una reputación sólida en la región por calidad y honestidad.</p>
+            <h3>+200 Clientes Satisfechos</h3>
+            <p>Consolidamos una reputación sólida con más de 200 clientes atendidos en la región.</p>
           </div>
         </div>
 
         <div class="timeline-item timeline-left" data-aos="fade-right" data-aos-delay="300">
-          <div class="timeline-dot timeline-dot--purple"><i class="fas fa-bolt"></i></div>
+          <div class="timeline-dot timeline-dot--purple" aria-hidden="true"><i class="fas fa-bolt"></i></div>
           <div class="timeline-card">
-            <span class="timeline-year">2026 – Hoy</span>
+            <span class="timeline-year">2026 — Hoy</span>
             <h3>ZonaTech Geek Premium</h3>
-            <p>Seguimos creciendo con nuevas tecnologías, más servicios digitales y un equipo comprometido con llevar la tecnología a otro nivel. 🚀</p>
+            <p>Creciendo con nuevas tecnologías, más servicios y un equipo listo para el siguiente nivel. 🚀</p>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ========== RESEÑAS / TESTIMONIOS ========== -->
+  <!-- ══════════════════════════════════════════════════
+       RESEÑAS
+  ══════════════════════════════════════════════════ -->
   <section id="resenas" class="section reviews-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="section-tag">// RESEÑAS</span>
         <h2 class="section-title">Lo que dicen<br /><span class="text-gradient">nuestros clientes</span></h2>
-        <p class="section-desc">Más de 300 clientes satisfechos no pueden equivocarse. ¡Lee sus experiencias!</p>
+        <p class="section-desc">Más de 300 clientes satisfechos no pueden equivocarse.</p>
       </div>
 
-      <!-- Carrusel de testimonios -->
       <div class="reviews-carousel" data-aos="fade-up" data-aos-delay="150">
         <div class="reviews-track" id="reviewsTrack">
-
           <div class="review-card">
-            <div class="review-stars">
+            <div class="review-stars" aria-label="5 de 5 estrellas">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="review-text">"Excelente servicio, me repararon el portátil en menos de 24 horas. El equipo es muy profesional y honesto con los precios. 100% recomendado."</p>
+            <p class="review-text">"Excelente servicio, me repararon el portátil en menos de 24 horas. Muy profesionales y honestos con los precios. 100% recomendado."</p>
             <div class="review-author">
-              <div class="review-avatar">JM</div>
-              <div>
-                <strong>Juan Martínez</strong>
-                <small>Reparación de portátil</small>
-              </div>
+              <div class="review-avatar" aria-hidden="true">JM</div>
+              <div><strong>Juan Martínez</strong><small>Reparación de portátil</small></div>
             </div>
           </div>
-
           <div class="review-card">
-            <div class="review-stars">
+            <div class="review-stars" aria-label="5 de 5 estrellas">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="review-text">"Me hicieron el logo de mi negocio y quedó espectacular. El diseño es moderno y profesional, superaron mis expectativas totalmente."</p>
+            <p class="review-text">"Me hicieron el logo de mi negocio y quedó espectacular. Moderno y profesional, superaron mis expectativas completamente."</p>
             <div class="review-author">
-              <div class="review-avatar rv2">LP</div>
-              <div>
-                <strong>Laura Pérez</strong>
-                <small>Diseño gráfico — Logo</small>
-              </div>
+              <div class="review-avatar rv2" aria-hidden="true">LP</div>
+              <div><strong>Laura Pérez</strong><small>Diseño gráfico — Logo</small></div>
             </div>
           </div>
-
           <div class="review-card">
-            <div class="review-stars">
+            <div class="review-stars" aria-label="5 de 5 estrellas">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="review-text">"Tenía mi PC llena de virus y prácticamente no funcionaba. En ZonaTech Geek la dejaron como nueva. Rápidos, amables y muy bien precio."</p>
+            <p class="review-text">"Mi PC estaba llena de virus y no funcionaba. La dejaron como nueva. Rápidos, amables y muy buen precio."</p>
             <div class="review-author">
-              <div class="review-avatar rv3">CA</div>
-              <div>
-                <strong>Carlos Ardila</strong>
-                <small>Eliminación de virus</small>
-              </div>
+              <div class="review-avatar rv3" aria-hidden="true">CA</div>
+              <div><strong>Carlos Ardila</strong><small>Eliminación de virus</small></div>
             </div>
           </div>
-
           <div class="review-card">
-            <div class="review-stars">
+            <div class="review-stars" aria-label="4.5 de 5 estrellas">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-stroke"></i>
             </div>
-            <p class="review-text">"El soporte remoto fue increíble. Me resolvieron el problema del sistema operativo en menos de una hora sin necesidad de moverme de la casa."</p>
+            <p class="review-text">"El soporte remoto fue increíble. Resolvieron mi problema de sistema operativo en menos de una hora desde casa."</p>
             <div class="review-author">
-              <div class="review-avatar rv4">MR</div>
-              <div>
-                <strong>María Rodríguez</strong>
-                <small>Soporte remoto</small>
-              </div>
+              <div class="review-avatar rv4" aria-hidden="true">MR</div>
+              <div><strong>María Rodríguez</strong><small>Soporte remoto</small></div>
             </div>
           </div>
-
           <div class="review-card">
-            <div class="review-stars">
+            <div class="review-stars" aria-label="5 de 5 estrellas">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="review-text">"Contraté el manejo de mis redes sociales y en un mes ya noté el crecimiento. El contenido que crean es creativo y muy profesional."</p>
+            <p class="review-text">"Contraté el manejo de mis redes y en un mes noté el crecimiento. Contenido creativo y estrategia profesional."</p>
             <div class="review-author">
-              <div class="review-avatar rv5">DG</div>
-              <div>
-                <strong>Diego González</strong>
-                <small>Community Manager</small>
-              </div>
+              <div class="review-avatar rv5" aria-hidden="true">DG</div>
+              <div><strong>Diego González</strong><small>Community Manager</small></div>
             </div>
           </div>
-
           <div class="review-card">
-            <div class="review-stars">
+            <div class="review-stars" aria-label="5 de 5 estrellas">
               <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
             </div>
-            <p class="review-text">"Editaron el video de mi evento y quedó de película. Los efectos, la música, los cortes... todo perfecto. Ya les encargué otro proyecto."</p>
+            <p class="review-text">"El video de mi evento quedó perfecto. Efectos, música y cortes increíbles. Ya les encargué otro proyecto."</p>
             <div class="review-author">
-              <div class="review-avatar rv6">AS</div>
-              <div>
-                <strong>Andrea Sánchez</strong>
-                <small>Edición de video</small>
-              </div>
+              <div class="review-avatar rv6" aria-hidden="true">AS</div>
+              <div><strong>Andrea Sánchez</strong><small>Edición de video</small></div>
             </div>
           </div>
-
         </div>
 
-        <!-- Controles del carrusel -->
         <div class="carousel-controls">
-          <button class="carousel-btn" id="prevBtn" aria-label="Anterior">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <div class="carousel-dots" id="carouselDots"></div>
-          <button class="carousel-btn" id="nextBtn" aria-label="Siguiente">
-            <i class="fas fa-chevron-right"></i>
-          </button>
+          <button class="carousel-btn" id="prevBtn" aria-label="Reseña anterior"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+          <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegar reseñas"></div>
+          <button class="carousel-btn" id="nextBtn" aria-label="Siguiente reseña"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
         </div>
       </div>
 
-      <!-- Resumen de calificación global -->
       <div class="rating-summary" data-aos="fade-up" data-aos-delay="300">
         <div class="rating-big">
           <span class="rating-number">4.9</span>
-          <div class="rating-stars-big">
+          <div class="rating-stars-big" aria-label="4.9 de 5 estrellas">
             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-stroke"></i>
           </div>
           <p>Calificación promedio</p>
         </div>
         <div class="rating-bars">
-          <div class="rating-bar-row">
-            <span>5 ⭐</span>
-            <div class="rating-bar"><div class="rating-fill" style="width:82%"></div></div>
-            <span>82%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span>4 ⭐</span>
-            <div class="rating-bar"><div class="rating-fill" style="width:12%"></div></div>
-            <span>12%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span>3 ⭐</span>
-            <div class="rating-bar"><div class="rating-fill" style="width:4%"></div></div>
-            <span>4%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span>2 ⭐</span>
-            <div class="rating-bar"><div class="rating-fill" style="width:2%"></div></div>
-            <span>2%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span>1 ⭐</span>
-            <div class="rating-bar"><div class="rating-fill" style="width:0%"></div></div>
-            <span>0%</span>
-          </div>
+          <div class="rating-bar-row"><span>5 ⭐</span><div class="rating-bar"><div class="rating-fill" data-w="82%"></div></div><span>82%</span></div>
+          <div class="rating-bar-row"><span>4 ⭐</span><div class="rating-bar"><div class="rating-fill" data-w="12%"></div></div><span>12%</span></div>
+          <div class="rating-bar-row"><span>3 ⭐</span><div class="rating-bar"><div class="rating-fill" data-w="4%"></div></div><span>4%</span></div>
+          <div class="rating-bar-row"><span>2 ⭐</span><div class="rating-bar"><div class="rating-fill" data-w="2%"></div></div><span>2%</span></div>
+          <div class="rating-bar-row"><span>1 ⭐</span><div class="rating-bar"><div class="rating-fill" data-w="0%"></div></div><span>0%</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== DEJAR COMENTARIO ========== -->
+  <!-- ══════════════════════════════════════════════════
+       DEJAR COMENTARIO
+  ══════════════════════════════════════════════════ -->
   <section class="section comment-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="section-tag">// TU OPINIÓN</span>
         <h2 class="section-title">¿Ya usaste nuestros servicios?<br /><span class="text-gradient">¡Cuéntanos!</span></h2>
-        <p class="section-desc">Tu opinión nos ayuda a mejorar y a que otros clientes nos conozcan.</p>
+        <p class="section-desc">Tu opinión ayuda a que más personas nos conozcan.</p>
       </div>
 
       <div class="comment-layout" data-aos="fade-up" data-aos-delay="150">
-        <!-- Formulario para dejar reseña -->
-        <form id="commentForm" class="comment-form" novalidate>
+        <form id="commentForm" class="comment-form" novalidate aria-label="Formulario de reseña">
           <div class="form-row">
             <div class="form-group">
-              <label for="c-nombre"><i class="fas fa-user"></i> Tu nombre</label>
-              <input type="text" id="c-nombre" name="c-nombre" placeholder="¿Cómo te llamas?" required />
-              <span class="form-error" id="error-c-nombre"></span>
+              <label for="c-nombre"><i class="fas fa-user" aria-hidden="true"></i> Tu nombre</label>
+              <input type="text" id="c-nombre" name="c-nombre" placeholder="¿Cómo te llamas?" autocomplete="name" required />
+              <span class="form-error" id="error-c-nombre" role="alert"></span>
             </div>
             <div class="form-group">
-              <label for="c-servicio"><i class="fas fa-tools"></i> Servicio que usaste</label>
+              <label for="c-servicio"><i class="fas fa-tools" aria-hidden="true"></i> Servicio que usaste</label>
               <input type="text" id="c-servicio" name="c-servicio" placeholder="Ej: Reparación de PC" required />
-              <span class="form-error" id="error-c-servicio"></span>
+              <span class="form-error" id="error-c-servicio" role="alert"></span>
             </div>
           </div>
 
-          <!-- Selector de estrellas interactivo -->
           <div class="form-group">
-            <label><i class="fas fa-star"></i> Tu calificación</label>
-            <div class="star-selector" id="starSelector">
-              <i class="fas fa-star star-opt" data-val="1"></i>
-              <i class="fas fa-star star-opt" data-val="2"></i>
-              <i class="fas fa-star star-opt" data-val="3"></i>
-              <i class="fas fa-star star-opt" data-val="4"></i>
-              <i class="fas fa-star star-opt" data-val="5"></i>
+            <label><i class="fas fa-star" aria-hidden="true"></i> Tu calificación</label>
+            <div class="star-selector" id="starSelector" role="group" aria-label="Seleccionar calificación">
+              <i class="fas fa-star star-opt" data-val="1" tabindex="0" aria-label="1 estrella"></i>
+              <i class="fas fa-star star-opt" data-val="2" tabindex="0" aria-label="2 estrellas"></i>
+              <i class="fas fa-star star-opt" data-val="3" tabindex="0" aria-label="3 estrellas"></i>
+              <i class="fas fa-star star-opt" data-val="4" tabindex="0" aria-label="4 estrellas"></i>
+              <i class="fas fa-star star-opt" data-val="5" tabindex="0" aria-label="5 estrellas"></i>
             </div>
             <input type="hidden" id="c-rating" name="c-rating" value="0" />
-            <span class="form-error" id="error-c-rating"></span>
+            <span class="form-error" id="error-c-rating" role="alert"></span>
           </div>
 
           <div class="form-group">
-            <label for="c-comentario"><i class="fas fa-comment-dots"></i> Tu comentario</label>
+            <label for="c-comentario"><i class="fas fa-comment-dots" aria-hidden="true"></i> Tu comentario</label>
             <textarea id="c-comentario" name="c-comentario" rows="4" placeholder="Cuéntanos tu experiencia con nuestro servicio..." required></textarea>
-            <span class="form-error" id="error-c-comentario"></span>
+            <span class="form-error" id="error-c-comentario" role="alert"></span>
           </div>
 
           <button type="submit" class="btn btn-primary btn-form">
-            <i class="fas fa-paper-plane"></i> Publicar Reseña
+            <i class="fas fa-paper-plane" aria-hidden="true"></i> Publicar Reseña
           </button>
 
-          <div id="commentSuccess" class="form-success hidden">
-            <i class="fas fa-circle-check"></i>
+          <div id="commentSuccess" class="form-success hidden" role="status" aria-live="polite">
+            <i class="fas fa-circle-check" aria-hidden="true"></i>
             ¡Gracias por tu reseña! Tu opinión es muy valiosa para nosotros. 🌟
           </div>
         </form>
 
-        <!-- Reseñas recientes publicadas dinámicamente -->
         <div class="comments-live">
           <h3 class="comments-live-title">
-            <i class="fas fa-comments"></i> Reseñas recientes
+            <i class="fas fa-comments" aria-hidden="true"></i> Reseñas recientes
             <span id="commentCount" class="comment-count-badge">6</span>
           </h3>
-          <div id="commentsList" class="comments-list">
-            <!-- Se agregan dinámicamente con JS -->
-          </div>
+          <div id="commentsList" class="comments-list" aria-live="polite" aria-label="Lista de reseñas"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== COTIZAR ========== -->
+  <!-- ══════════════════════════════════════════════════
+       COTIZAR
+  ══════════════════════════════════════════════════ -->
   <section id="cotizar" class="section quote-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="section-tag">// COTIZAR</span>
         <h2 class="section-title">Solicita tu <span class="text-gradient">Cotización</span></h2>
-        <p class="section-desc">Cuéntanos qué necesitas y te respondemos lo antes posible.</p>
+        <p class="section-desc">Cuéntanos qué necesitas y te respondemos a la brevedad.</p>
       </div>
 
-      <form id="quoteForm" class="quote-form" data-aos="fade-up" data-aos-delay="200" novalidate>
+      <form id="quoteForm" class="quote-form" data-aos="fade-up" data-aos-delay="200" novalidate aria-label="Formulario de cotización">
         <div class="form-row">
           <div class="form-group">
-            <label for="nombre"><i class="fas fa-user"></i> Nombre completo</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
-            <span class="form-error" id="error-nombre"></span>
+            <label for="nombre"><i class="fas fa-user" aria-hidden="true"></i> Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" autocomplete="name" required />
+            <span class="form-error" id="error-nombre" role="alert"></span>
           </div>
           <div class="form-group">
-            <label for="telefono"><i class="fas fa-phone"></i> Teléfono / WhatsApp</label>
-            <input type="tel" id="telefono" name="telefono" placeholder="300 000 0000" required />
-            <span class="form-error" id="error-telefono"></span>
+            <label for="telefono"><i class="fas fa-phone" aria-hidden="true"></i> Teléfono / WhatsApp</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="300 000 0000" autocomplete="tel" required />
+            <span class="form-error" id="error-telefono" role="alert"></span>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="correo"><i class="fas fa-envelope"></i> Correo electrónico</label>
-          <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required />
-          <span class="form-error" id="error-correo"></span>
+          <label for="correo"><i class="fas fa-envelope" aria-hidden="true"></i> Correo electrónico</label>
+          <input type="email" id="correo" name="correo" placeholder="tu@correo.com" autocomplete="email" required />
+          <span class="form-error" id="error-correo" role="alert"></span>
         </div>
 
         <div class="form-group">
-          <label for="servicio"><i class="fas fa-list-check"></i> Servicio requerido</label>
+          <label for="servicio"><i class="fas fa-list-check" aria-hidden="true"></i> Servicio requerido</label>
           <select id="servicio" name="servicio" required>
-            <option value="">-- Selecciona un servicio --</option>
-            <optgroup label="Servicios Técnicos">
+            <option value="">— Selecciona un servicio —</option>
+            <optgroup label="🔧 Servicios Técnicos">
               <option>Reparación de computadoras</option>
               <option>Mantenimiento preventivo</option>
               <option>Mantenimiento correctivo</option>
@@ -995,72 +913,71 @@
               <option>Cambio de piezas</option>
               <option>Mantenimiento de impresoras</option>
             </optgroup>
-            <optgroup label="Servicios Digitales">
+            <optgroup label="🎨 Servicios Digitales">
               <option>Edición de video</option>
               <option>Diseño gráfico</option>
               <option>Community Manager</option>
               <option>Manejo de redes sociales</option>
               <option>Retoque fotográfico</option>
-              <option>Fotografía</option>
+              <option>Fotografía profesional</option>
             </optgroup>
           </select>
-          <span class="form-error" id="error-servicio"></span>
+          <span class="form-error" id="error-servicio" role="alert"></span>
         </div>
 
         <div class="form-group">
-          <label for="descripcion"><i class="fas fa-comment-dots"></i> Descripción del problema o servicio</label>
-          <textarea id="descripcion" name="descripcion" rows="5" placeholder="Cuéntanos con detalle qué necesitas..." required></textarea>
-          <span class="form-error" id="error-descripcion"></span>
+          <label for="descripcion"><i class="fas fa-comment-dots" aria-hidden="true"></i> Descripción del servicio</label>
+          <textarea id="descripcion" name="descripcion" rows="5" placeholder="Cuéntanos con detalle qué necesitas, modelo del equipo, problema, etc." required></textarea>
+          <span class="form-error" id="error-descripcion" role="alert"></span>
         </div>
 
-        <!-- ====== SELECTOR DE CANAL DE ENVÍO ====== -->
+        <!-- Selector de canal -->
         <div class="send-channel-box">
-          <p class="send-channel-label">
-            <i class="fas fa-share-nodes"></i>
-            ¿Cómo quieres enviarnos tu solicitud?
-          </p>
-          <div class="send-channel-options">
-            <label class="channel-option" id="channelWa">
+          <p class="send-channel-label"><i class="fas fa-share-nodes" aria-hidden="true"></i> ¿Cómo enviamos tu solicitud?</p>
+          <div class="send-channel-options" role="group" aria-label="Seleccionar canal de envío">
+            <label class="channel-option">
               <input type="radio" name="sendChannel" value="whatsapp" checked />
               <div class="channel-card channel-card--wa">
-                <div class="channel-icon"><i class="fab fa-whatsapp"></i></div>
+                <div class="channel-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
                 <div class="channel-text">
                   <strong>WhatsApp</strong>
                   <span>Respuesta en minutos</span>
                 </div>
-                <div class="channel-check"><i class="fas fa-circle-check"></i></div>
+                <div class="channel-check"><i class="fas fa-circle-check" aria-hidden="true"></i></div>
               </div>
             </label>
-
-            <label class="channel-option" id="channelEmail">
+            <label class="channel-option">
               <input type="radio" name="sendChannel" value="email" />
               <div class="channel-card channel-card--email">
-                <div class="channel-icon"><i class="fas fa-envelope"></i></div>
+                <div class="channel-icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
                 <div class="channel-text">
-                  <strong>Correo Electrónico</strong>
-                  <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb8999928a858c8a9988828ac59f8e8883ab8c868a8287c5888486">[email&#160;protected]</a></span>
+                  <strong>Correo</strong>
+                  <span>bryangarcia.tech@gmail.com</span>
                 </div>
-                <div class="channel-check"><i class="fas fa-circle-check"></i></div>
+                <div class="channel-check"><i class="fas fa-circle-check" aria-hidden="true"></i></div>
               </div>
             </label>
           </div>
         </div>
-        <!-- ====================================== -->
 
         <button type="submit" class="btn btn-primary btn-form" id="quoteSubmitBtn">
-          <i class="fab fa-whatsapp"></i>
+          <i class="fab fa-whatsapp" aria-hidden="true"></i>
           <span id="quoteSubmitText">Enviar por WhatsApp</span>
         </button>
 
-        <div id="formSuccess" class="form-success hidden">
-          <i class="fas fa-circle-check"></i>
-          <span id="formSuccessMsg">¡Abriendo WhatsApp con tu solicitud! Si no se abre, <a href="https://wa.me/573172898993" target="_blank" style="color:var(--neon-green);text-decoration:underline">haz clic aquí</a>. 🚀</span>
+        <div id="formSuccess" class="form-success hidden" role="status" aria-live="polite">
+          <i class="fas fa-circle-check" aria-hidden="true"></i>
+          <span id="formSuccessMsg">¡Abriendo WhatsApp con tu solicitud! Si no se abre,
+            <a href="https://wa.me/573172898993" target="_blank" rel="noopener noreferrer">haz clic aquí</a>. 🚀
+          </span>
         </div>
       </form>
     </div>
   </section>
 
-  <!-- ========== CONTACTO ========== -->
+  <!-- ══════════════════════════════════════════════════
+       CONTACTO
+  ══════════════════════════════════════════════════ -->
   <section id="contacto" class="section contact-section">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -1069,56 +986,62 @@
       </div>
 
       <div class="contact-grid">
-
-        <a href="https://www.facebook.com/profile.php?id=61577888367331" target="_blank" class="contact-card" data-aos="zoom-in" data-aos-delay="100">
-          <div class="contact-icon facebook"><i class="fab fa-facebook-f"></i></div>
-          <span>Facebook</span>
-          <small>ZonaTech Geek</small>
+        <a href="https://www.facebook.com/profile.php?id=61577888367331"
+           target="_blank" rel="noopener noreferrer"
+           class="contact-card" data-aos="zoom-in" data-aos-delay="100"
+           aria-label="Facebook ZonaTech Geek">
+          <div class="contact-icon facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></div>
+          <span>Facebook</span><small>ZonaTech Geek</small>
         </a>
-
-        <a href="https://www.instagram.com/techzoneptolleras/" target="_blank" class="contact-card" data-aos="zoom-in" data-aos-delay="200">
-          <div class="contact-icon instagram"><i class="fab fa-instagram"></i></div>
-          <span>Instagram</span>
-          <small>@zonatechgeek</small>
+        <a href="https://www.instagram.com/techzoneptolleras/"
+           target="_blank" rel="noopener noreferrer"
+           class="contact-card" data-aos="zoom-in" data-aos-delay="200"
+           aria-label="Instagram techzoneptolleras">
+          <div class="contact-icon instagram"><i class="fab fa-instagram" aria-hidden="true"></i></div>
+          <span>Instagram</span><small>@techzoneptolleras</small>
         </a>
-
-        <a href="https://tiktok.com" target="_blank" class="contact-card" data-aos="zoom-in" data-aos-delay="300">
-          <div class="contact-icon tiktok"><i class="fab fa-tiktok"></i></div>
-          <span>TikTok</span>
-          <small>@zonatechgeek</small>
+        <a href="https://tiktok.com/@zonatechgeek"
+           target="_blank" rel="noopener noreferrer"
+           class="contact-card" data-aos="zoom-in" data-aos-delay="300"
+           aria-label="TikTok zonatechgeek">
+          <div class="contact-icon tiktok"><i class="fab fa-tiktok" aria-hidden="true"></i></div>
+          <span>TikTok</span><small>@zonatechgeek</small>
         </a>
-
-        <a href="https://wa.me/573172898993" target="_blank" class="contact-card" data-aos="zoom-in" data-aos-delay="400">
-          <div class="contact-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
-          <span>WhatsApp</span>
-          <small>317 289 8993</small>
+        <a href="https://wa.me/573172898993"
+           target="_blank" rel="noopener noreferrer"
+           class="contact-card" data-aos="zoom-in" data-aos-delay="400"
+           aria-label="WhatsApp 317 289 8993">
+          <div class="contact-icon whatsapp"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
+          <span>WhatsApp</span><small>317 289 8993</small>
         </a>
-
       </div>
 
       <div class="contact-location" data-aos="fade-up" data-aos-delay="500">
-        <i class="fas fa-map-marker-alt"></i>
-        <p>Colombia - Puerto Lleras Meta  · Atención presencial y remota a nivel nacional</p>
+        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+        <p>Colombia · Puerto Lleras, Meta &nbsp;|&nbsp; Atención presencial y remota a nivel nacional</p>
       </div>
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="footer-glow"></div>
+    <div class="footer-glow" aria-hidden="true"></div>
     <div class="container">
       <div class="footer-grid">
+
         <div class="footer-brand">
-          <div class="nav-logo">
-            <span class="logo-icon"><i class="fas fa-microchip"></i></span>
+          <a href="#inicio" class="nav-logo" aria-label="ZonaTech Geek">
+            <span class="logo-icon" aria-hidden="true"><i class="fas fa-microchip"></i></span>
             <span class="logo-text">ZonaTech<span class="logo-accent">Geek</span></span>
-          </div>
+          </a>
           <p>Soluciones tecnológicas y digitales para llevar tu negocio y equipos al siguiente nivel.</p>
           <div class="footer-socials">
-            <a href="https://www.facebook.com/profile.php?id=61577888367331" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/techzoneptolleras/" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="https://wa.me/573172898993" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61577888367331" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/techzoneptolleras/"           target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://tiktok.com/@zonatechgeek"                       target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://wa.me/573172898993"                             target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
           </div>
         </div>
 
@@ -1128,8 +1051,9 @@
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#servicios">Servicios</a></li>
             <li><a href="#precios">Precios</a></li>
+            <li><a href="#pagos">Pagos</a></li>
             <li><a href="#nosotros">Nosotros</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#resenas">Reseñas</a></li>
             <li><a href="#cotizar">Cotizar</a></li>
           </ul>
         </div>
@@ -1137,7 +1061,7 @@
         <div class="footer-links">
           <h4>Servicios</h4>
           <ul>
-            <li><a href="#servicios">Reparación</a></li>
+            <li><a href="#servicios">Reparación de PC</a></li>
             <li><a href="#servicios">Mantenimiento</a></li>
             <li><a href="#servicios">Eliminación de virus</a></li>
             <li><a href="#servicios">Diseño gráfico</a></li>
@@ -1148,38 +1072,43 @@
 
         <div class="footer-contact">
           <h4>Contacto Rápido</h4>
-          <p><i class="fab fa-whatsapp"></i> 317 289 8993</p>
-          <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60021219010e0701120309014e1405030820070d01090c4e030f0d">[email&#160;protected]</a> </p>
-          <p><i class="fas fa-map-marker-alt"></i> Colombia- Puerto Lleras Meta</p>
-          <a href="#cotizar" class="btn btn-primary" style="margin-top:1rem; font-size:0.85rem; padding:0.6rem 1.2rem;">
-            <i class="fas fa-bolt"></i> Cotizar ahora
+          <p><i class="fab fa-whatsapp" aria-hidden="true"></i> 317 289 8993</p>
+          <p><i class="fas fa-envelope" aria-hidden="true"></i> bryangarcia.tech@gmail.com</p>
+          <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Puerto Lleras, Meta</p>
+          <a href="#cotizar" class="btn btn-primary" style="margin-top:1rem">
+            <i class="fas fa-bolt" aria-hidden="true"></i> Cotizar ahora
           </a>
         </div>
+
       </div>
 
       <div class="footer-bottom">
-        <p>© 2021 <span class="logo-accent">ZonaTech Geek</span>. Todos los derechos reservados.</p>
-        <p>Diseñado con <i class="fas fa-heart" style="color:#f43f5e"></i> Desde Pto Lleras Meta, Para colombia</p>
+        <p>© <span id="footerYear">2021</span> <span class="logo-accent">ZonaTech Geek</span>. Todos los derechos reservados.</p>
+        <p>Hecho con <i class="fas fa-heart" style="color:#f43f5e" aria-hidden="true"></i> desde Puerto Lleras, Meta — Colombia 🇨🇴</p>
       </div>
     </div>
   </footer>
 
-  <!-- ========== BOTÓN FLOTANTE WHATSAPP ========== -->
-  <a href="https://wa.me/573172898993" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
-    <div class="wa-pulse"></div>
-    <i class="fab fa-whatsapp"></i>
+  <!-- WhatsApp flotante -->
+  <a href="https://wa.me/573172898993?text=Hola%20ZonaTech%20Geek%2C%20necesito%20informaci%C3%B3n%20sobre%20sus%20servicios."
+     target="_blank" rel="noopener noreferrer"
+     class="whatsapp-float"
+     aria-label="Chatear por WhatsApp ahora">
+    <div class="wa-pulse" aria-hidden="true"></div>
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
   </a>
 
-  <!-- ========== BOTÓN BACK TO TOP ========== -->
-  <button id="backToTop" class="back-to-top" aria-label="Volver arriba">
-    <i class="fas fa-chevron-up"></i>
+  <!-- Volver arriba -->
+  <button id="backToTop" class="back-to-top" aria-label="Volver al inicio de la página">
+    <i class="fas fa-chevron-up" aria-hidden="true"></i>
   </button>
 
-  <!-- Three.js CDN -->
+  <!-- Toast copiado -->
+  <div id="copyToast" class="copy-toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts al final del body -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- AOS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <!-- Main JS -->
   <script src="script.js"></script>
 
 </body>
