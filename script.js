@@ -1,705 +1,560 @@
 /**
  * ZonaTech Geek — script.js
- * Interactividad, animaciones, Three.js y validación de formulario
+ * Versión FINAL — Production ready — Senior build
+ * ─────────────────────────────────────────────────
+ * Módulos:
+ *  1.  Loader (con 3 capas de seguridad)
+ *  2.  Cursor personalizado
+ *  3.  Navbar (mobile + overlay + Escape + scroll activo)
+ *  4.  Back to top
+ *  5.  Contadores animados (hero)
+ *  6.  Three.js — partículas 3D hero
+ *  7.  Formulario de cotización → WhatsApp / Email
+ *  8.  Glow dinámico en cards
+ *  9.  Tilt 3D en service cards (solo desktop)
+ * 10.  Smooth scroll
+ * 11.  Carrusel de reseñas
+ * 12.  Contadores experiencia (IntersectionObserver)
+ * 13.  Selector de estrellas
+ * 14.  Formulario de comentarios (localStorage persistente)
+ * 15.  Barras de habilidades (IntersectionObserver)
+ * 16.  Rating bars animadas
+ * 17.  Copy to clipboard (pagos)
+ * 18.  Año dinámico en footer
+ * 19.  Scroll observer secciones (section-tag)
  */
 
-/* ============================================================
-   1. LOADER — con timeout de seguridad anti-bloqueo
-============================================================ */
-// Bloquear scroll mientras carga
+'use strict';
+
+/* ════════════════════════════════════════════════════════════
+   CONSTANTES GLOBALES
+════════════════════════════════════════════════════════════ */
+const WA_NUMBER    = '573172898993';
+const OWNER_EMAIL  = 'bryangarcia.tech@gmail.com';
+const STORAGE_KEY  = 'ztg_reviews_v1';
+const HEADER_H     = () => parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hh')) || 68;
+
+/* Helper: ¿dispositivo táctil? */
+const isTouchDevice = () => window.matchMedia('(hover:none)').matches || ('ontouchstart' in window);
+
+/* ════════════════════════════════════════════════════════════
+   1. LOADER — 3 capas de seguridad
+════════════════════════════════════════════════════════════ */
 document.body.style.overflow = 'hidden';
 
 function hideLoader() {
   const loader = document.getElementById('loader');
   if (!loader || loader.classList.contains('hidden')) return;
   loader.classList.add('hidden');
-  // Solo quitar overflow si el menú móvil no está abierto
+  // Solo liberar scroll si el menú no está abierto
   if (!document.getElementById('navLinks')?.classList.contains('open')) {
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
   }
+  // Inicializar AOS
   if (typeof AOS !== 'undefined') {
-    AOS.init({ duration: 700, once: true, easing: 'ease-out-cubic', offset: 60 });
+    AOS.init({ duration:700, once:true, easing:'ease-out-cubic', offset:60, disable:'phone' });
   }
-  startCounters();
+  startHeroCounters();
+  animateRatingBars();
 }
 
-// Opción 1: dispara cuando todo carga
-window.addEventListener('load', () => {
-  setTimeout(hideLoader, 2500);
-});
+window.addEventListener('load',           () => setTimeout(hideLoader, 2400));
+setTimeout(hideLoader, 4200);                         // Seguridad nivel 2
+document.addEventListener('DOMContentLoaded', () => setTimeout(hideLoader, 5500)); // Seguridad nivel 3
 
-// Opción 2 (seguridad): si load no dispara en 4s, ocultar igual
-setTimeout(hideLoader, 4000);
-
-// Opción 3: si el DOM ya está listo y todo parece ok, no esperar más de 5s
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(hideLoader, 5000);
-});
-
-
-/* ============================================================
-   2. CURSOR PERSONALIZADO (solo desktop)
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   2. CURSOR PERSONALIZADO (solo desktop con hover)
+════════════════════════════════════════════════════════════ */
 (function initCursor() {
+  if (isTouchDevice()) return;
   const dot  = document.querySelector('.cursor-dot');
   const ring = document.querySelector('.cursor-ring');
   if (!dot || !ring) return;
 
-  let mouseX = 0, mouseY = 0;
-  let ringX  = 0, ringY  = 0;
+  let mx = 0, my = 0, rx = 0, ry = 0;
 
   window.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
-  });
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  }, { passive:true });
 
-  // El anillo sigue con suavizado
-  function animateRing() {
-    ringX += (mouseX - ringX) * 0.15;
-    ringY += (mouseY - ringY) * 0.15;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
+  (function loop() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
 
-  // Hover state en elementos interactivos
-  const hoverable = 'a, button, .service-card, .pricing-card, .contact-card, .payment-card';
-  document.querySelectorAll(hoverable).forEach(el => {
+  const sel = 'a,button,.service-card,.pricing-card,.contact-card,.payment-card,.skill-tag';
+  document.querySelectorAll(sel).forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
     el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
   });
 })();
 
-
-/* ============================================================
-   3. NAVBAR: scroll activo + menú mobile + overlay
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   3. NAVBAR — mobile + overlay + Escape + scroll activo
+════════════════════════════════════════════════════════════ */
 (function initNavbar() {
   const header  = document.getElementById('header');
   const toggle  = document.getElementById('navToggle');
-  const navMenu = document.getElementById('navLinks');
+  const menu    = document.getElementById('navLinks');
   const overlay = document.getElementById('navOverlay');
-  const links   = navMenu.querySelectorAll('.nav-link');
+  if (!header || !toggle || !menu) return;
 
+  const links = menu.querySelectorAll('.nav-link');
+
+  /* Abrir / cerrar */
   function openMenu() {
-    toggle.classList.add('open');
-    navMenu.classList.add('open');
-    if (overlay) overlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // evita scroll del fondo
+    menu.classList.add('open');
+    overlay?.classList.add('active');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
   }
-
   function closeMenu() {
-    toggle.classList.remove('open');
-    navMenu.classList.remove('open');
-    if (overlay) overlay.classList.remove('active');
+    menu.classList.remove('open');
+    overlay?.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
 
-  // Hamburger toggle
   toggle.addEventListener('click', () => {
-    navMenu.classList.contains('open') ? closeMenu() : openMenu();
+    menu.classList.contains('open') ? closeMenu() : openMenu();
   });
+  links.forEach(l => l.addEventListener('click', closeMenu));
+  overlay?.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
-  // Cerrar al hacer clic en un enlace
-  links.forEach(link => link.addEventListener('click', closeMenu));
-
-  // Cerrar al hacer clic en el overlay
-  if (overlay) overlay.addEventListener('click', closeMenu);
-
-  // Cerrar con tecla Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeMenu();
-  });
-
-  // Header scrolled
+  /* Header al hacer scroll */
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 50);
-    updateActiveLink();
-  }, { passive: true });
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+      updateActive();
+      ticking = false;
+    });
+  }, { passive:true });
 
-  // Marcar enlace activo según sección visible
-  function updateActiveLink() {
+  /* Sección activa */
+  function updateActive() {
     const sections = document.querySelectorAll('section[id]');
     let current = '';
-    sections.forEach(sec => {
-      if (window.scrollY >= sec.offsetTop - 110) current = sec.getAttribute('id');
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - HEADER_H() - 20) current = s.id;
     });
-    links.forEach(link => {
-      const href = link.getAttribute('href')?.replace('#', '');
-      link.classList.toggle('active', href === current);
+    links.forEach(l => {
+      const href = l.getAttribute('href')?.replace('#','');
+      l.classList.toggle('active', href === current);
     });
   }
 })();
 
-
-/* ============================================================
+/* ════════════════════════════════════════════════════════════
    4. BACK TO TOP
-============================================================ */
-(function initBackToTop() {
+════════════════════════════════════════════════════════════ */
+(function initBackTop() {
   const btn = document.getElementById('backToTop');
   if (!btn) return;
-
   window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 400);
-  }, { passive: true });
-
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+    btn.classList.toggle('visible', window.scrollY > 500);
+  }, { passive:true });
+  btn.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
 })();
 
-
-/* ============================================================
-   5. CONTADORES ANIMADOS (Hero stats)
-============================================================ */
-function startCounters() {
-  const counters = document.querySelectorAll('.stat-number[data-target]');
-
-  counters.forEach(counter => {
-    const target = parseInt(counter.dataset.target);
-    const duration = 2000; // ms
-    const step = Math.ceil(target / (duration / 16));
-    let current = 0;
-
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
-      }
-      counter.textContent = current;
+/* ════════════════════════════════════════════════════════════
+   5. CONTADORES HERO
+════════════════════════════════════════════════════════════ */
+function startHeroCounters() {
+  document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+    const target = +el.dataset.target;
+    const step   = Math.ceil(target / (2000 / 16));
+    let cur = 0;
+    const t = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = cur;
+      if (cur >= target) clearInterval(t);
     }, 16);
   });
 }
 
-
-/* ============================================================
-   6. THREE.JS — FONDO DE PARTÍCULAS 3D (Hero)
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   6. THREE.JS — HERO PARTÍCULAS 3D
+════════════════════════════════════════════════════════════ */
 (function initThreeJS() {
   const canvas = document.getElementById('heroCanvas');
   if (!canvas || typeof THREE === 'undefined') return;
 
-  // Renderer
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  // En móvil reducimos partículas para rendimiento
+  const COUNT = isTouchDevice() ? 500 : 1200;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:!isTouchDevice() });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // Scene & Camera
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 80;
 
-  /* ---- PARTÍCULAS ---- */
-  const PARTICLE_COUNT = 1200;
-  const positions = new Float32Array(PARTICLE_COUNT * 3);
-  const colors    = new Float32Array(PARTICLE_COUNT * 3);
-
-  // Paleta: azul neón, morado, verde LED
+  /* Partículas */
+  const pos    = new Float32Array(COUNT * 3);
+  const cols   = new Float32Array(COUNT * 3);
   const palette = [
-    new THREE.Color('#00d4ff'),
-    new THREE.Color('#a855f7'),
-    new THREE.Color('#39ff14'),
-    new THREE.Color('#0099bb'),
+    new THREE.Color('#00d4ff'), new THREE.Color('#a855f7'),
+    new THREE.Color('#39ff14'), new THREE.Color('#0099bb'),
   ];
 
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
+  for (let i = 0; i < COUNT; i++) {
     const i3 = i * 3;
-
-    // Posición aleatoria en esfera
-    const r     = 60 + Math.random() * 80;
-    const theta = Math.random() * Math.PI * 2;
-    const phi   = Math.acos(2 * Math.random() - 1);
-
-    positions[i3]     = r * Math.sin(phi) * Math.cos(theta);
-    positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-    positions[i3 + 2] = r * Math.cos(phi);
-
-    // Color
+    const r  = 60 + Math.random() * 80;
+    const t  = Math.random() * Math.PI * 2;
+    const p  = Math.acos(2 * Math.random() - 1);
+    pos[i3]   = r * Math.sin(p) * Math.cos(t);
+    pos[i3+1] = r * Math.sin(p) * Math.sin(t);
+    pos[i3+2] = r * Math.cos(p);
     const c = palette[Math.floor(Math.random() * palette.length)];
-    colors[i3]     = c.r;
-    colors[i3 + 1] = c.g;
-    colors[i3 + 2] = c.b;
+    cols[i3] = c.r; cols[i3+1] = c.g; cols[i3+2] = c.b;
   }
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
-
-  const material = new THREE.PointsMaterial({
-    size: 0.7,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.75,
-    sizeAttenuation: true,
-  });
-
-  const particles = new THREE.Points(geometry, material);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(cols, 3));
+  const mat = new THREE.PointsMaterial({ size:.7, vertexColors:true, transparent:true, opacity:.75, sizeAttenuation:true });
+  const particles = new THREE.Points(geo, mat);
   scene.add(particles);
 
-  /* ---- LÍNEAS DE CONEXIÓN (wireframe torus) ---- */
-  const torusGeo = new THREE.TorusGeometry(35, 0.3, 8, 60);
-  const torusMat = new THREE.MeshBasicMaterial({
-    color: 0x00d4ff,
-    transparent: true,
-    opacity: 0.06,
-    wireframe: true,
-  });
-  const torus = new THREE.Mesh(torusGeo, torusMat);
-  torus.rotation.x = Math.PI / 4;
-  scene.add(torus);
+  /* Torus wireframe */
+  const addTorus = (r, tube, segs, color, opacity) => {
+    const m = new THREE.Mesh(
+      new THREE.TorusGeometry(r, tube, segs[0], segs[1]),
+      new THREE.MeshBasicMaterial({ color, transparent:true, opacity, wireframe:true })
+    );
+    scene.add(m); return m;
+  };
+  const torus1 = addTorus(35, .3, [8,  60], 0x00d4ff, .06);
+  const torus2 = addTorus(50, .2, [6,  80], 0xa855f7, .04);
+  torus1.rotation.x = Math.PI / 4;
 
-  // Segundo torus (morado)
-  const torus2Geo = new THREE.TorusGeometry(50, 0.2, 6, 80);
-  const torus2Mat = new THREE.MeshBasicMaterial({
-    color: 0xa855f7,
-    transparent: true,
-    opacity: 0.04,
-    wireframe: true,
-  });
-  const torus2 = new THREE.Mesh(torus2Geo, torus2Mat);
-  scene.add(torus2);
-
-  /* ---- MOUSE PARALLAX ---- */
-  let mouseX = 0, mouseY = 0;
+  /* Parallax mouse */
+  let mx = 0, my = 0;
   window.addEventListener('mousemove', e => {
-    mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+    mx = (e.clientX / window.innerWidth  - .5) * 2;
+    my = (e.clientY / window.innerHeight - .5) * 2;
+  }, { passive:true });
 
-  /* ---- RESIZE ---- */
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  /* ---- ANIMATE LOOP ---- */
   const clock = new THREE.Clock();
-
-  function animate() {
+  (function animate() {
     requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
-
-    particles.rotation.y = t * 0.025;
-    particles.rotation.x = t * 0.012;
-
-    torus.rotation.y = t * 0.08;
-    torus.rotation.z = t * 0.04;
-    torus2.rotation.x = t * 0.05;
-    torus2.rotation.y = -t * 0.03;
-
-    // Parallax suave con el mouse
-    camera.position.x += (mouseX * 8 - camera.position.x) * 0.02;
-    camera.position.y += (-mouseY * 8 - camera.position.y) * 0.02;
+    particles.rotation.y = t * .025;
+    particles.rotation.x = t * .012;
+    torus1.rotation.y    = t * .08;
+    torus1.rotation.z    = t * .04;
+    torus2.rotation.x    = t * .05;
+    torus2.rotation.y    = -t * .03;
+    camera.position.x += (mx * 8 - camera.position.x) * .02;
+    camera.position.y += (-my * 8 - camera.position.y) * .02;
     camera.lookAt(scene.position);
-
     renderer.render(scene, camera);
-  }
-  animate();
+  })();
 })();
 
-
-/* ============================================================
-   7. FORMULARIO DE COTIZACIÓN → WHATSAPP o CORREO ELECTRÓNICO
-============================================================ */
-(function initForm() {
-  const form    = document.getElementById('quoteForm');
-  const success = document.getElementById('formSuccess');
+/* ════════════════════════════════════════════════════════════
+   7. FORMULARIO COTIZACIÓN → WHATSAPP / EMAIL
+════════════════════════════════════════════════════════════ */
+(function initQuoteForm() {
+  const form       = document.getElementById('quoteForm');
+  const successEl  = document.getElementById('formSuccess');
   const submitBtn  = document.getElementById('quoteSubmitBtn');
   const submitText = document.getElementById('quoteSubmitText');
   const successMsg = document.getElementById('formSuccessMsg');
   if (!form) return;
 
-  const WA_NUMBER  = '573172898993';
-  const OWNER_EMAIL = 'bryangarcia.tech@gmail.com';
-
-  /* ── Actualizar botón según canal elegido ── */
-  function updateBtn() {
+  /* Actualizar label del botón según canal */
+  function syncBtn() {
     const ch = form.elements['sendChannel']?.value || 'whatsapp';
-    if (ch === 'whatsapp') {
-      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> <span>Enviar por WhatsApp</span>';
-    } else {
-      submitBtn.innerHTML = '<i class="fas fa-envelope"></i> <span>Enviar al Correo</span>';
+    if (submitBtn) {
+      submitBtn.innerHTML = ch === 'whatsapp'
+        ? '<i class="fab fa-whatsapp" aria-hidden="true"></i> <span>Enviar por WhatsApp</span>'
+        : '<i class="fas fa-envelope" aria-hidden="true"></i> <span>Enviar por Correo</span>';
     }
   }
+  form.querySelectorAll('input[name="sendChannel"]').forEach(r => r.addEventListener('change', syncBtn));
+  syncBtn();
 
-  form.querySelectorAll('input[name="sendChannel"]').forEach(r => {
-    r.addEventListener('change', updateBtn);
-  });
-  updateBtn(); // estado inicial
-
-  /* ── Reglas de validación ── */
+  /* Validación */
   const rules = {
-    nombre:      { required: true, minLength: 3,  label: 'El nombre' },
-    telefono:    { required: true, pattern: /^[0-9\s\+\-]{7,15}$/, label: 'El teléfono' },
-    correo:      { required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, label: 'El correo' },
-    servicio:    { required: true, label: 'El servicio' },
-    descripcion: { required: true, minLength: 10, label: 'La descripción' },
+    nombre:      { required:true, min:3,  label:'El nombre' },
+    telefono:    { required:true, pattern:/^[0-9\s\+\-]{7,15}$/, label:'El teléfono' },
+    correo:      { required:true, pattern:/^[^\s@]+@[^\s@]+\.[^\s@]+$/, label:'El correo' },
+    servicio:    { required:true, label:'El servicio' },
+    descripcion: { required:true, min:10, label:'La descripción' },
   };
 
-  function validateField(field) {
-    const rule  = rules[field.name];
+  function validate(field) {
+    const rule = rules[field.name];
     if (!rule) return true;
-    const errEl = document.getElementById('error-' + field.name);
-    const value = field.value.trim();
-    let message = '';
-    if (rule.required && !value) {
-      message = `${rule.label} es obligatorio.`;
-    } else if (rule.minLength && value.length < rule.minLength) {
-      message = `${rule.label} debe tener al menos ${rule.minLength} caracteres.`;
-    } else if (rule.pattern && !rule.pattern.test(value)) {
-      if (field.name === 'correo')   message = 'Ingresa un correo válido.';
-      if (field.name === 'telefono') message = 'Ingresa un teléfono válido.';
+    const err = document.getElementById('error-' + field.name);
+    const val = field.value.trim();
+    let msg = '';
+    if (rule.required && !val)                       msg = `${rule.label} es obligatorio.`;
+    else if (rule.min && val.length < rule.min)      msg = `${rule.label} debe tener al menos ${rule.min} caracteres.`;
+    else if (rule.pattern && !rule.pattern.test(val)) {
+      if (field.name === 'correo')   msg = 'Ingresa un correo válido.';
+      if (field.name === 'telefono') msg = 'Ingresa un teléfono válido.';
     }
-    if (errEl) errEl.textContent = message;
-    field.classList.toggle('error', !!message);
-    return !message;
+    if (err) err.textContent = msg;
+    field.classList.toggle('error', !!msg);
+    return !msg;
   }
 
-  Object.keys(rules).forEach(name => {
-    const field = form.elements[name];
-    if (!field) return;
-    const events = field.tagName === 'SELECT' ? ['change'] : ['blur', 'input'];
-    events.forEach(ev => field.addEventListener(ev, () => validateField(field)));
+  Object.keys(rules).forEach(n => {
+    const f = form.elements[n];
+    if (!f) return;
+    const evs = f.tagName === 'SELECT' ? ['change'] : ['blur','input'];
+    evs.forEach(ev => f.addEventListener(ev, () => validate(f)));
   });
 
-  /* ── Submit ── */
   form.addEventListener('submit', e => {
     e.preventDefault();
-
-    let valid = true;
-    Object.keys(rules).forEach(name => {
-      const field = form.elements[name];
-      if (field && !validateField(field)) valid = false;
-    });
-    if (!valid) {
-      const firstError = form.querySelector('.error');
-      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    let ok = true;
+    Object.keys(rules).forEach(n => { if (form.elements[n] && !validate(form.elements[n])) ok = false; });
+    if (!ok) {
+      form.querySelector('.error')?.scrollIntoView({ behavior:'smooth', block:'center' });
       return;
     }
 
-    const nombre      = form.elements['nombre'].value.trim();
-    const telefono    = form.elements['telefono'].value.trim();
-    const correo      = form.elements['correo'].value.trim();
-    const servicio    = form.elements['servicio'].value;
-    const descripcion = form.elements['descripcion'].value.trim();
-    const canal       = form.elements['sendChannel']?.value || 'whatsapp';
+    const n    = form.elements['nombre'].value.trim();
+    const tel  = form.elements['telefono'].value.trim();
+    const mail = form.elements['correo'].value.trim();
+    const svc  = form.elements['servicio'].value;
+    const desc = form.elements['descripcion'].value.trim();
+    const ch   = form.elements['sendChannel']?.value || 'whatsapp';
 
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Enviando...</span>';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> <span>Enviando...</span>';
 
     setTimeout(() => {
-      if (canal === 'whatsapp') {
-        /* ── Canal WhatsApp ── */
+      if (ch === 'whatsapp') {
         const msg =
 `🚀 *NUEVA COTIZACIÓN — ZonaTech Geek*
 
-👤 *Nombre:* ${nombre}
-📞 *Teléfono:* ${telefono}
-📧 *Correo:* ${correo}
-🛠️ *Servicio:* ${servicio}
+👤 *Nombre:*    ${n}
+📞 *Teléfono:*  ${tel}
+📧 *Correo:*    ${mail}
+🛠️ *Servicio:*  ${svc}
 
 📝 *Descripción:*
-${descripcion}
+${desc}
 
-_Enviado desde zonatechgeek.com_`;
-
+_Enviado desde el sitio web_`;
         window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-
         if (successMsg) successMsg.innerHTML =
-          `✅ ¡WhatsApp abierto con tu solicitud! Si no se abrió, <a href="https://wa.me/${WA_NUMBER}" target="_blank" style="color:var(--neon-green);text-decoration:underline">haz clic aquí</a>. 🚀`;
-
+          `✅ ¡WhatsApp abierto con tu solicitud! Si no se abrió, <a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">haz clic aquí</a>. 🚀`;
       } else {
-        /* ── Canal Correo Electrónico ──
-           Usa mailto: para abrir el cliente de correo del usuario.
-           ⚡ Para envío real sin abrir app de correo, integra EmailJS:
-              https://www.emailjs.com  (gratis hasta 200 emails/mes)
-              emailjs.send('service_id','template_id',{nombre,telefono,correo,servicio,descripcion})
-        ────────────────────────────────────────────────── */
-        const subject = encodeURIComponent(`Cotización ZonaTech Geek — ${servicio}`);
-        const body    = encodeURIComponent(
-`Hola ZonaTech Geek,
-
-Solicito una cotización para el siguiente servicio:
-
-Nombre: ${nombre}
-Teléfono: ${telefono}
-Correo del cliente: ${correo}
-Servicio requerido: ${servicio}
-
-Descripción:
-${descripcion}
-
-Enviado desde el sitio web.`
-        );
-
-        window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
-
+        /* ─────────────────────────────────────────────────────
+           PARA ENVÍO REAL SIN ABRIR APP DE CORREO:
+           Integra EmailJS → https://www.emailjs.com (gratis 200/mes)
+           emailjs.send('service_id','template_id',{n,tel,mail,svc,desc})
+           ───────────────────────────────────────────────────── */
+        const subj = encodeURIComponent(`Cotización ZonaTech Geek — ${svc}`);
+        const body = encodeURIComponent(`Hola ZonaTech Geek,\n\nSolicito cotización:\n\nNombre: ${n}\nTeléfono: ${tel}\nCorreo: ${mail}\nServicio: ${svc}\n\nDescripción:\n${desc}\n\nEnviado desde el sitio web.`);
+        window.location.href = `mailto:${OWNER_EMAIL}?subject=${subj}&body=${body}`;
         if (successMsg) successMsg.innerHTML =
-          `📧 ¡Abriendo tu app de correo! El mensaje va dirigido a <strong style="color:var(--neon-blue)">${OWNER_EMAIL}</strong>. Si no se abrió, escríbenos directamente. ✅`;
+          `📧 ¡Abriendo tu app de correo! Mensaje dirigido a <strong>${OWNER_EMAIL}</strong>. ✅`;
       }
 
-      /* Reset */
       form.reset();
-      updateBtn();
+      syncBtn();
       submitBtn.disabled = false;
-      success.classList.remove('hidden');
-      setTimeout(() => success.classList.add('hidden'), 7000);
+      successEl?.classList.remove('hidden');
+      setTimeout(() => successEl?.classList.add('hidden'), 7000);
     }, 1000);
   });
 })();
 
-
-/* ============================================================
-   8. EFECTO GLOW EN CARDS AL MOVER EL MOUSE
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   8. GLOW DINÁMICO EN CARDS (sigue el cursor)
+════════════════════════════════════════════════════════════ */
 (function initCardGlow() {
-  const cards = document.querySelectorAll('.service-card, .pricing-card, .payment-card');
-
-  cards.forEach(card => {
+  if (isTouchDevice()) return;
+  document.querySelectorAll('.service-card, .pricing-card, .payment-card').forEach(card => {
     card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width)  * 100;
-      const y = ((e.clientY - rect.top)  / rect.height) * 100;
-
-      card.style.setProperty('--mouse-x', x + '%');
-      card.style.setProperty('--mouse-y', y + '%');
-
-      // Gradiente dinámico que sigue el cursor
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width)  * 100;
+      const y = ((e.clientY - r.top)  / r.height) * 100;
+      const isDigital = card.classList.contains('service-card--digital');
+      const color = isDigital ? '168,85,247' : '0,212,255';
       card.style.background = `
-        radial-gradient(
-          circle 200px at ${x}% ${y}%,
-          rgba(0,212,255,0.06) 0%,
-          transparent 70%
-        ),
-        var(--bg-card)
-      `;
+        radial-gradient(circle 200px at ${x}% ${y}%, rgba(${color},.065) 0%, transparent 70%),
+        var(--bg-c)`;
     });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.background = '';
-    });
+    card.addEventListener('mouseleave', () => { card.style.background = ''; });
   });
 })();
 
-
-/* ============================================================
-   9. TILT 3D EN SERVICE CARDS
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   9. TILT 3D — SERVICE CARDS (solo desktop)
+════════════════════════════════════════════════════════════ */
 (function initTilt() {
-  const cards = document.querySelectorAll('.service-card');
-
-  cards.forEach(card => {
+  if (isTouchDevice()) return;
+  document.querySelectorAll('.service-card').forEach(card => {
     card.addEventListener('mousemove', e => {
-      const rect     = card.getBoundingClientRect();
-      const centerX  = rect.left + rect.width  / 2;
-      const centerY  = rect.top  + rect.height / 2;
-      const deltaX   = (e.clientX - centerX) / (rect.width  / 2);
-      const deltaY   = (e.clientY - centerY) / (rect.height / 2);
-
-      const rotateY  =  deltaX * 8;  // máximo 8 grados
-      const rotateX  = -deltaY * 8;
-
-      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+      const r  = card.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      const rx = -((e.clientY - cy) / (r.height / 2)) * 8;
+      const ry =  ((e.clientX - cx) / (r.width  / 2)) * 8;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-5px)`;
     });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
   });
 })();
 
-
-/* ============================================================
-   10. SMOOTH SCROLL para links de anclaje
-============================================================ */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
+/* ════════════════════════════════════════════════════════════
+   10. SMOOTH SCROLL para anclajes
+════════════════════════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
     const target = document.querySelector(this.getAttribute('href'));
     if (!target) return;
     e.preventDefault();
-    const offset = 80; // alto del header fijo
-    const top = target.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top, behavior: 'smooth' });
+    const top = target.getBoundingClientRect().top + window.scrollY - HEADER_H() - 10;
+    window.scrollTo({ top, behavior:'smooth' });
   });
 });
 
-
-/* ============================================================
-   11. TEXTO TYPING EFFECT en el loader (ya en CSS)
-       Aquí solo nos aseguramos de no romper la animación
-============================================================ */
-
-
-/* ============================================================
-   13. CARRUSEL DE RESEÑAS
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   11. CARRUSEL DE RESEÑAS
+════════════════════════════════════════════════════════════ */
 (function initCarousel() {
-  const track   = document.getElementById('reviewsTrack');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const dotsContainer = document.getElementById('carouselDots');
+  const track = document.getElementById('reviewsTrack');
+  const prev  = document.getElementById('prevBtn');
+  const next  = document.getElementById('nextBtn');
+  const dots  = document.getElementById('carouselDots');
   if (!track) return;
 
-  const cards  = Array.from(track.querySelectorAll('.review-card'));
-  let current  = 0;
-  let autoTimer;
+  const cards = [...track.querySelectorAll('.review-card')];
+  let cur = 0, timer;
 
-  // Calcular cuántas tarjetas se ven según el ancho
-  function getVisible() {
-    if (window.innerWidth <= 600)  return 1;
-    if (window.innerWidth <= 900)  return 2;
-    return 3;
-  }
+  const vis = () => window.innerWidth <= 480 ? 1 : window.innerWidth <= 900 ? 2 : 3;
 
-  // Crear dots
   function buildDots() {
-    dotsContainer.innerHTML = '';
-    const totalSlides = Math.ceil(cards.length / getVisible());
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'carousel-dot' + (i === current ? ' active' : '');
-      dot.addEventListener('click', () => goTo(i));
-      dotsContainer.appendChild(dot);
+    if (!dots) return;
+    dots.innerHTML = '';
+    const total = Math.ceil(cards.length / vis());
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'carousel-dot' + (i === cur ? ' active' : '');
+      d.setAttribute('role', 'tab');
+      d.setAttribute('aria-label', `Reseña ${i + 1}`);
+      d.addEventListener('click', () => { stopAuto(); go(i); startAuto(); });
+      dots.appendChild(d);
     }
   }
 
-  function goTo(index) {
-    const visible = getVisible();
-    const maxIdx  = Math.ceil(cards.length / visible) - 1;
-    current = Math.max(0, Math.min(index, maxIdx));
-
-    const cardWidth  = cards[0].offsetWidth + 24; // 24 = gap
-    track.style.transform = `translateX(-${current * visible * cardWidth}px)`;
-
-    // Actualizar dots
-    document.querySelectorAll('.carousel-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
-    });
+  function go(idx) {
+    const v   = vis();
+    const max = Math.ceil(cards.length / v) - 1;
+    cur = Math.max(0, Math.min(idx, max));
+    const w = cards[0].offsetWidth + 22; // gap = 1.4rem ≈ 22px
+    track.style.transform = `translateX(-${cur * v * w}px)`;
+    dots?.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === cur));
   }
 
-  // Auto-play
-  function startAuto() {
-    autoTimer = setInterval(() => {
-      const maxIdx = Math.ceil(cards.length / getVisible()) - 1;
-      goTo(current < maxIdx ? current + 1 : 0);
-    }, 4500);
-  }
-  function stopAuto() { clearInterval(autoTimer); }
+  const startAuto = () => { timer = setInterval(() => go(cur < Math.ceil(cards.length / vis()) - 1 ? cur + 1 : 0), 4500); };
+  const stopAuto  = () => clearInterval(timer);
 
-  prevBtn.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
-  nextBtn.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+  prev?.addEventListener('click', () => { stopAuto(); go(cur - 1); startAuto(); });
+  next?.addEventListener('click', () => { stopAuto(); go(cur + 1); startAuto(); });
 
-  // Swipe en móvil
-  let touchStart = 0;
-  track.addEventListener('touchstart', e => { touchStart = e.touches[0].clientX; }, { passive: true });
+  /* Swipe móvil */
+  let tx = 0;
+  track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive:true });
   track.addEventListener('touchend',   e => {
-    const diff = touchStart - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) {
-      stopAuto();
-      diff > 0 ? goTo(current + 1) : goTo(current - 1);
-      startAuto();
-    }
+    const d = tx - e.changedTouches[0].clientX;
+    if (Math.abs(d) > 40) { stopAuto(); go(d > 0 ? cur + 1 : cur - 1); startAuto(); }
   });
 
-  window.addEventListener('resize', () => { buildDots(); goTo(current); });
-
+  window.addEventListener('resize', () => { buildDots(); go(cur); });
   buildDots();
   startAuto();
 })();
 
-
-/* ============================================================
-   14. CONTADORES EXPERIENCIA (exp-stat-num)
-       Se activan al entrar en pantalla con IntersectionObserver
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   12. CONTADORES EXPERIENCIA (IntersectionObserver)
+════════════════════════════════════════════════════════════ */
 (function initExpCounters() {
   const els = document.querySelectorAll('.exp-stat-num[data-target]');
   if (!els.length) return;
-
-  const observer = new IntersectionObserver(entries => {
+  const obs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       const el     = entry.target;
-      const target = parseInt(el.dataset.target);
-      const dur    = 2000;
-      const step   = Math.ceil(target / (dur / 16));
-      let current  = 0;
-
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) { current = target; clearInterval(timer); }
-        el.textContent = current;
+      const target = +el.dataset.target;
+      const step   = Math.ceil(target / (2000 / 16));
+      let cur = 0;
+      const t = setInterval(() => {
+        cur = Math.min(cur + step, target);
+        el.textContent = cur;
+        if (cur >= target) clearInterval(t);
       }, 16);
-
-      observer.unobserve(el);
+      obs.unobserve(el);
     });
-  }, { threshold: 0.3 });
-
-  els.forEach(el => observer.observe(el));
+  }, { threshold:.3 });
+  els.forEach(el => obs.observe(el));
 })();
 
-
-/* ============================================================
-   15. SELECTOR DE ESTRELLAS (formulario de comentario)
-============================================================ */
-(function initStarSelector() {
-  const stars  = document.querySelectorAll('.star-opt');
-  const input  = document.getElementById('c-rating');
+/* ════════════════════════════════════════════════════════════
+   13. SELECTOR DE ESTRELLAS (comentarios)
+════════════════════════════════════════════════════════════ */
+(function initStars() {
+  const stars = document.querySelectorAll('.star-opt');
+  const input = document.getElementById('c-rating');
   if (!stars.length || !input) return;
 
-  stars.forEach(star => {
-    // Hover
-    star.addEventListener('mouseenter', () => {
-      const val = parseInt(star.dataset.val);
-      stars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.val) <= val));
+  stars.forEach(s => {
+    s.addEventListener('mouseenter', () => {
+      const v = +s.dataset.val;
+      stars.forEach(x => x.classList.toggle('hovered', +x.dataset.val <= v));
     });
-    star.addEventListener('mouseleave', () => {
-      stars.forEach(s => s.classList.remove('hovered'));
+    s.addEventListener('mouseleave', () => stars.forEach(x => x.classList.remove('hovered')));
+    s.addEventListener('click', () => {
+      const v = +s.dataset.val;
+      input.value = v;
+      stars.forEach(x => x.classList.toggle('active', +x.dataset.val <= v));
+      const err = document.getElementById('error-c-rating');
+      if (err) err.textContent = '';
     });
-
-    // Click — fijar calificación
-    star.addEventListener('click', () => {
-      const val = parseInt(star.dataset.val);
-      input.value = val;
-      stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= val));
-      // Limpiar error
-      const errEl = document.getElementById('error-c-rating');
-      if (errEl) errEl.textContent = '';
-    });
+    /* Accesibilidad teclado */
+    s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); s.click(); } });
   });
 })();
 
-
-/* ============================================================
-   16. FORMULARIO DE COMENTARIOS — PERSISTENTE CON localStorage
-   Los comentarios sobreviven a recargas de página.
-============================================================ */
-(function initCommentForm() {
+/* ════════════════════════════════════════════════════════════
+   14. FORMULARIO COMENTARIOS — PERSISTENTE CON localStorage
+════════════════════════════════════════════════════════════ */
+(function initComments() {
   const form    = document.getElementById('commentForm');
   const success = document.getElementById('commentSuccess');
   const list    = document.getElementById('commentsList');
-  const countEl = document.getElementById('commentCount');
+  const badge   = document.getElementById('commentCount');
   if (!form || !list) return;
 
-  // Clave de almacenamiento
-  const STORAGE_KEY = 'ztg_reviews_v1';
+  /* Estilos para estrellas inactivas */
+  document.head.insertAdjacentHTML('beforeend',
+    '<style>.live-comment-stars .fa-star.inactive{color:rgba(255,255,255,.14)}</style>');
 
-  // Comentarios semilla (solo se usan si no hay nada guardado aún)
-  const seedComments = [
-    { id: 's1', name: 'Juan Martínez',   service: 'Reparación de portátil', rating: 5, text: 'Excelente servicio, muy profesionales y rápidos. 100% recomendado.', date: 'Hace 2 días',    color: 'linear-gradient(135deg,#00d4ff,#a855f7)' },
-    { id: 's2', name: 'Laura Pérez',     service: 'Diseño gráfico',          rating: 5, text: 'El logo quedó hermoso, superaron mis expectativas totalmente.',       date: 'Hace 5 días',    color: 'linear-gradient(135deg,#f43f5e,#ec4899)' },
-    { id: 's3', name: 'Carlos Ardila',   service: 'Eliminación de virus',    rating: 5, text: 'Mi PC quedó como nueva, servicio increíble y precio justo.',           date: 'Hace 1 semana',  color: 'linear-gradient(135deg,#f97316,#eab308)' },
-    { id: 's4', name: 'María Rodríguez', service: 'Soporte remoto',          rating: 4, text: 'Me resolvieron el problema en menos de una hora. Muy eficientes.',    date: 'Hace 2 semanas', color: 'linear-gradient(135deg,#a855f7,#6366f1)' },
-    { id: 's5', name: 'Diego González',  service: 'Community Manager',       rating: 5, text: 'Mis redes crecieron muchísimo. Trabajo excelente.',                   date: 'Hace 3 semanas', color: 'linear-gradient(135deg,#10b981,#06b6d4)' },
-    { id: 's6', name: 'Andrea Sánchez',  service: 'Edición de video',        rating: 5, text: 'El video de mi evento quedó increíble. Muy talentosos.',              date: 'Hace 1 mes',     color: 'linear-gradient(135deg,#f43f5e,#a855f7)' },
-  ];
-
-  const avatarColors = [
+  const COLORS = [
     'linear-gradient(135deg,#00d4ff,#a855f7)',
     'linear-gradient(135deg,#f43f5e,#ec4899)',
     'linear-gradient(135deg,#f97316,#eab308)',
@@ -710,188 +565,182 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     'linear-gradient(135deg,#39ff14,#00d4ff)',
   ];
 
-  /* ── Utilidades ─────────────────────────────────────── */
-  function getInitials(name) {
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-  }
+  const SEEDS = [
+    { id:'s1', name:'Juan Martínez',   service:'Reparación de portátil', rating:5, text:'Excelente servicio, muy profesionales y rápidos. 100% recomendado.',       date:'Hace 2 días',    color:COLORS[0] },
+    { id:'s2', name:'Laura Pérez',     service:'Diseño gráfico',          rating:5, text:'El logo quedó hermoso, superaron mis expectativas totalmente.',             date:'Hace 5 días',    color:COLORS[1] },
+    { id:'s3', name:'Carlos Ardila',   service:'Eliminación de virus',    rating:5, text:'Mi PC quedó como nueva, servicio increíble y precio justo.',                date:'Hace 1 semana',  color:COLORS[2] },
+    { id:'s4', name:'María Rodríguez', service:'Soporte remoto',          rating:4, text:'Me resolvieron el problema en menos de una hora. Muy eficientes.',          date:'Hace 2 semanas', color:COLORS[3] },
+    { id:'s5', name:'Diego González',  service:'Community Manager',       rating:5, text:'Mis redes crecieron muchísimo. Trabajo excelente.',                        date:'Hace 3 semanas', color:COLORS[4] },
+    { id:'s6', name:'Andrea Sánchez',  service:'Edición de video',        rating:5, text:'El video de mi evento quedó increíble. Muy talentosos.',                   date:'Hace 1 mes',     color:COLORS[5] },
+  ];
 
-  function starsHTML(n) {
-    let html = '';
-    for (let i = 1; i <= 5; i++) {
-      html += `<i class="fas fa-star${i > n ? ' inactive' : ''}"></i>`;
-    }
-    return html;
-  }
+  const load   = () => { try { const r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } };
+  const save   = d => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch {} };
+  const inits  = n => n.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  const stars  = n => Array.from({length:5}, (_,i) => `<i class="fas fa-star${i>=n?' inactive':''}"></i>`).join('');
 
-  function formatDate(isoString) {
-    if (!isoString) return 'Hace un momento';
-    const diff = Date.now() - new Date(isoString).getTime();
-    const mins  = Math.floor(diff / 60000);
-    const hours = Math.floor(diff / 3600000);
-    const days  = Math.floor(diff / 86400000);
+  function relDate(d) {
+    if (!d || d.startsWith('Hace')) return d || 'Ahora mismo';
+    const diff  = Date.now() - new Date(d).getTime();
+    const mins  = Math.floor(diff / 6e4);
+    const hours = Math.floor(diff / 3.6e6);
+    const days  = Math.floor(diff / 864e5);
     if (mins  <  1) return 'Ahora mismo';
     if (mins  < 60) return `Hace ${mins} min`;
     if (hours < 24) return `Hace ${hours}h`;
-    if (days  <  7) return `Hace ${days} día${days > 1 ? 's' : ''}`;
-    return new Date(isoString).toLocaleDateString('es-CO', { day:'numeric', month:'short' });
+    if (days  <  7) return `Hace ${days} día${days>1?'s':''}`;
+    return new Date(d).toLocaleDateString('es-CO',{day:'numeric',month:'short'});
   }
 
-  /* ── localStorage helpers ───────────────────────────── */
-  function loadComments() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
-  }
-
-  function saveComments(arr) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch {}
-  }
-
-  /* ── Renderizar un comentario en el DOM ─────────────── */
-  function createCommentEl(data) {
-    const div = document.createElement('div');
-    div.className = 'live-comment';
-    div.dataset.id = data.id;
-    div.innerHTML = `
+  function createEl(c) {
+    const d = document.createElement('div');
+    d.className  = 'live-comment';
+    d.dataset.id = c.id;
+    d.innerHTML  = `
       <div class="live-comment-header">
         <div class="live-comment-author">
-          <div class="live-comment-avatar" style="background:${data.color}">${getInitials(data.name)}</div>
+          <div class="live-comment-avatar" style="background:${c.color}" aria-hidden="true">${inits(c.name)}</div>
           <div>
-            <div class="live-comment-name">${data.name}</div>
-            <div class="live-comment-service">${data.service}</div>
+            <div class="live-comment-name">${escapeHtml(c.name)}</div>
+            <div class="live-comment-service">${escapeHtml(c.service)}</div>
           </div>
         </div>
-        <div class="live-comment-stars">${starsHTML(data.rating)}</div>
+        <div class="live-comment-stars" aria-label="${c.rating} de 5 estrellas">${stars(c.rating)}</div>
       </div>
-      <p class="live-comment-text">"${data.text}"</p>
-      <span class="live-comment-date">${typeof data.date === 'string' && data.date.startsWith('Hace') ? data.date : formatDate(data.date)}</span>
-    `;
-    return div;
+      <p class="live-comment-text">"${escapeHtml(c.text)}"</p>
+      <span class="live-comment-date">${relDate(c.date)}</span>`;
+    return d;
   }
 
-  /* ── Inicializar lista ──────────────────────────────── */
-  let stored = loadComments();
-
-  // Primera vez: guardar semilla en localStorage
-  if (!stored) {
-    stored = [...seedComments];
-    saveComments(stored);
+  /* Escapar HTML para prevenir XSS */
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
   }
 
-  // Renderizar todos los comentarios guardados
-  stored.forEach(c => list.appendChild(createCommentEl(c)));
-  if (countEl) countEl.textContent = stored.length;
+  let data = load() || (() => { save(SEEDS); return [...SEEDS]; })();
+  data.forEach(c => list.appendChild(createEl(c)));
+  if (badge) badge.textContent = data.length;
 
-  /* ── Submit de nuevo comentario ─────────────────────── */
-  let colorIdx = stored.length; // para no repetir colores
+  let colorIdx = data.length;
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-
     const nombre     = form.elements['c-nombre'].value.trim();
     const servicio   = form.elements['c-servicio'].value.trim();
-    const rating     = parseInt(form.elements['c-rating'].value);
+    const rating     = +form.elements['c-rating'].value;
     const comentario = form.elements['c-comentario'].value.trim();
-    let valid = true;
-
-    function setErr(id, msg) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = msg;
-      if (msg) valid = false;
-    }
-
-    setErr('error-c-nombre',     nombre.length < 2    ? 'Ingresa tu nombre.'           : '');
-    setErr('error-c-servicio',   servicio.length < 2   ? 'Indica qué servicio usaste.'  : '');
-    setErr('error-c-rating',     rating === 0           ? 'Selecciona una calificación.' : '');
-    setErr('error-c-comentario', comentario.length < 10 ? 'El comentario es muy corto.' : '');
-
-    if (!valid) return;
+    let ok = true;
+    const setE = (id, msg) => { const el = document.getElementById(id); if (el) el.textContent = msg; if (msg) ok = false; };
+    setE('error-c-nombre',     nombre.length < 2    ? 'Ingresa tu nombre.'          : '');
+    setE('error-c-servicio',   servicio.length < 2   ? 'Indica el servicio usado.'   : '');
+    setE('error-c-rating',     rating === 0           ? 'Selecciona calificación.'    : '');
+    setE('error-c-comentario', comentario.length < 10 ? 'El comentario es muy corto.' : '');
+    if (!ok) return;
 
     const btn = form.querySelector('.btn-form');
     btn.disabled  = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Publicando...';
 
     setTimeout(() => {
-      // Crear objeto del comentario
-      const newComment = {
+      const c = {
         id:      'u' + Date.now(),
-        name:    nombre,
-        service: servicio,
-        rating:  rating,
-        text:    comentario,
-        date:    new Date().toISOString(),  // guardamos fecha real
-        color:   avatarColors[colorIdx++ % avatarColors.length],
+        name:    nombre, service:servicio, rating, text:comentario,
+        date:    new Date().toISOString(),
+        color:   COLORS[colorIdx++ % COLORS.length],
       };
-
-      // Guardar en localStorage (primero en el array)
-      const current = loadComments() || [];
-      current.unshift(newComment);
-      saveComments(current);
-
-      // Mostrar en el DOM
-      const el = createCommentEl(newComment);
+      const current = load() || [];
+      current.unshift(c);
+      save(current);
+      const el = createEl(c);
       list.insertBefore(el, list.firstChild);
-      if (countEl) countEl.textContent = current.length;
-
-      // Reset del formulario
+      if (badge) badge.textContent = current.length;
       form.reset();
       document.querySelectorAll('.star-opt').forEach(s => s.classList.remove('active'));
       form.elements['c-rating'].value = '0';
       btn.disabled  = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Publicar Reseña';
-      success.classList.remove('hidden');
-      setTimeout(() => success.classList.add('hidden'), 4000);
-
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      btn.innerHTML = '<i class="fas fa-paper-plane" aria-hidden="true"></i> Publicar Reseña';
+      success?.classList.remove('hidden');
+      setTimeout(() => success?.classList.add('hidden'), 4500);
+      el.scrollIntoView({ behavior:'smooth', block:'nearest' });
     }, 1000);
   });
-
-  // CSS para estrellas inactivas
-  const style = document.createElement('style');
-  style.textContent = '.live-comment-stars .fa-star.inactive { color: rgba(255,255,255,0.15); }';
-  document.head.appendChild(style);
 })();
 
-
-/* ============================================================
-   17. ANIMACIÓN DE BARRAS DEL PERFIL PROFESIONAL
-============================================================ */
+/* ════════════════════════════════════════════════════════════
+   15. BARRAS DEL PERFIL (IntersectionObserver)
+════════════════════════════════════════════════════════════ */
 (function initProfileBars() {
   const bars = document.querySelectorAll('.profile-bar-fill[data-width]');
   if (!bars.length) return;
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const bar = entry.target;
-      bar.style.width = bar.dataset.width + '%';
-      observer.unobserve(bar);
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.style.width = e.target.dataset.width + '%';
+      obs.unobserve(e.target);
     });
-  }, { threshold: 0.4 });
-
-  bars.forEach(bar => {
-    bar.style.width = '0';
-    observer.observe(bar);
-  });
+  }, { threshold:.4 });
+  bars.forEach(b => { b.style.width = '0'; obs.observe(b); });
 })();
 
-(function initSectionObserver() {
-  const tags = document.querySelectorAll('.section-tag');
+/* ════════════════════════════════════════════════════════════
+   16. RATING BARS ANIMADAS (IntersectionObserver)
+════════════════════════════════════════════════════════════ */
+function animateRatingBars() {
+  const fills = document.querySelectorAll('.rating-fill[data-w]');
+  if (!fills.length) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.style.width = e.target.dataset.w;
+      obs.unobserve(e.target);
+    });
+  }, { threshold:.3 });
+  fills.forEach(f => { f.style.width = '0'; obs.observe(f); });
+}
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+/* ════════════════════════════════════════════════════════════
+   17. COPY TO CLIPBOARD (Pagos)
+════════════════════════════════════════════════════════════ */
+(function initCopyBtns() {
+  const toast = document.getElementById('copyToast');
+  document.querySelectorAll('.payment-copy-btn[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.dataset.copy;
+      navigator.clipboard?.writeText(text).then(() => showToast(`✅ ${text} copiado`)).catch(() => showToast(`📋 ${text}`));
+    });
+  });
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+})();
+
+/* ════════════════════════════════════════════════════════════
+   18. AÑO DINÁMICO EN FOOTER
+════════════════════════════════════════════════════════════ */
+const footerYear = document.getElementById('footerYear');
+if (footerYear) footerYear.textContent = new Date().getFullYear();
+
+/* ════════════════════════════════════════════════════════════
+   19. SECTION TAGS — fade in al scroll
+════════════════════════════════════════════════════════════ */
+(function initTagFade() {
+  const tags = document.querySelectorAll('.section-tag');
+  const obs  = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity   = '1';
+        e.target.style.transform = 'translateY(0)';
+        obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
-
-  tags.forEach(tag => {
-    tag.style.opacity = '0';
-    tag.style.transform = 'translateY(10px)';
-    tag.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(tag);
+  }, { threshold:.1 });
+  tags.forEach(t => {
+    t.style.opacity    = '0';
+    t.style.transform  = 'translateY(12px)';
+    t.style.transition = 'opacity .5s ease, transform .5s ease';
+    obs.observe(t);
   });
 })();
