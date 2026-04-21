@@ -415,14 +415,22 @@
 
         <!--
           ════════════════════════════════════════════════════
-          WOMPI — Integración activa (Sandbox)
-          Llave pública: pub_test_QLfy3Qgr3xtBpxSHbb1aNakSudmGpEZz
-          Link directo:  https://checkout.wompi.co/l/test_VPOS_CCycdV
+          WOMPI — PRODUCCIÓN ACTIVA ✅
+          Llave pública prod: pub_prod_7Gdo78nYeKeGp774veAauJWtdNPxOhJq
           
-          Para PRODUCCIÓN:
-          1. Espera aprobación de Wompi
-          2. Cambia la URL al link de producción que te genere Wompi
-          3. Para el widget embed, genera el integrity hash con tu llave privada
+          ⚠️  INTEGRITY HASH (IMPORTANTE):
+          Para que el widget funcione en producción debes generar
+          el hash de integridad en tu servidor/backend así:
+          
+          SHA256( referencia + monto_en_centavos + moneda + llave_integridad )
+          Ejemplo Node.js:
+            const crypto = require('crypto');
+            const hash = crypto.createHash('sha256')
+              .update('REF-001' + '5000000' + 'COP' + 'prod_integrity_ShXccGaKgp42ldRePp4zi8Av9LXW8QvqxveMb...')
+              .digest('hex');
+          
+          Mientras no tengas backend, usa el botón directo de tu
+          link de pago de Wompi (más abajo) que NO requiere hash.
           ════════════════════════════════════════════════════
         -->
         <div class="payment-card wompi-card" data-aos="zoom-in" data-aos-delay="300">
@@ -430,20 +438,70 @@
             <div class="wompi-logo-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
             <span class="wompi-logo-text">wom<span>pi</span></span>
           </div>
+
+          <div class="wompi-prod-badge">
+            <i class="fas fa-circle-check" aria-hidden="true"></i> Cuenta verificada — Producción activa
+          </div>
+
           <h3>Pago en Línea Seguro</h3>
-          <p>Tarjeta, PSE, Nequi o Efecty — pasarela oficial de Bancolombia.</p>
+          <p>Elige tu método de pago preferido. Proceso 100% seguro con Wompi by Bancolombia.</p>
+
           <div class="wompi-methods">
             <span class="wompi-method"><i class="fas fa-credit-card" aria-hidden="true"></i> Tarjeta</span>
             <span class="wompi-method"><i class="fas fa-university" aria-hidden="true"></i> PSE</span>
             <span class="wompi-method"><i class="fas fa-mobile-alt" aria-hidden="true"></i> Nequi</span>
             <span class="wompi-method"><i class="fas fa-money-bill" aria-hidden="true"></i> Efecty</span>
           </div>
-          <a href="https://checkout.wompi.co/l/test_VPOS_CCycdV" target="_blank" rel="noopener noreferrer" class="btn-wompi">
-            <i class="fas fa-lock" aria-hidden="true"></i> Pagar con Wompi
-          </a>
-          <div class="wompi-sandbox-note">
-            <i class="fas fa-flask" aria-hidden="true"></i> Modo pruebas — aprobación pendiente
+
+          <!-- Selector de monto para el widget embed -->
+          <div class="wompi-amount-wrap">
+            <label class="wompi-amount-label" for="wompiAmount">
+              <i class="fas fa-tag" aria-hidden="true"></i> Monto a pagar (COP)
+            </label>
+            <div class="wompi-amount-row">
+              <span class="wompi-currency">$</span>
+              <input
+                type="number"
+                id="wompiAmount"
+                class="wompi-amount-input"
+                placeholder="Ej: 60000"
+                min="1000"
+                step="1000"
+                aria-label="Monto en pesos colombianos"
+              />
+            </div>
+            <div class="wompi-preset-btns" role="group" aria-label="Montos predefinidos">
+              <button class="wompi-preset" data-amount="20999" type="button">$20.999</button>
+              <button class="wompi-preset" data-amount="35999" type="button">$35.999</button>
+              <button class="wompi-preset" data-amount="60999" type="button">$60.999</button>
+              <button class="wompi-preset" data-amount="100000" type="button">$100.000</button>
+            </div>
           </div>
+
+          <!-- ────────────────────────────────────────────
+               WIDGET OFICIAL WOMPI (embed en página)
+               Requiere integrity hash generado con tu llave privada.
+               Mientras no tengas backend, usa el botón directo abajo.
+          ──────────────────────────────────────────── -->
+          <div id="wompiWidgetContainer" class="wompi-widget-wrap">
+            <!-- El widget se inyecta dinámicamente por JS -->
+          </div>
+
+          <!-- Botón alternativo: link directo de tu Wompi (NO necesita hash) -->
+          <a id="wompiDirectBtn"
+             href="https://checkout.wompi.co/l/REEMPLAZA_CON_TU_LINK_DE_PAGO"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn-wompi btn-wompi-direct">
+            <i class="fas fa-lock" aria-hidden="true"></i>
+            <span>Pagar ahora con Wompi</span>
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+
+          <p class="wompi-direct-note">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            Pago seguro procesado por Wompi · Bancolombia
+          </p>
         </div>
       </div>
     </div>
