@@ -744,3 +744,113 @@ if (footerYear) footerYear.textContent = new Date().getFullYear();
     obs.observe(t);
   });
 })();
+
+/* ════════════════════════════════════════════════════════════
+   WOMPI PRODUCCIÓN — Widget embed + selector de monto
+════════════════════════════════════════════════════════════ */
+(function initWompiWidget() {
+
+  /* ─────────────────────────────────────────────────────────
+     CONFIGURA AQUÍ TUS DATOS DE PRODUCCIÓN
+  ──────────────────────────────────────────────────────────── */
+  const WOMPI_PUB_KEY    = 'pub_prod_7Gdo78nYeKeGp774veAauJWtdNPxOhJq';
+
+  /*
+    LINK DIRECTO DE PAGO (de tu panel Wompi → "Recibir pagos"):
+    Reemplaza la URL del botón en el HTML:
+      href="https://checkout.wompi.co/l/REEMPLAZA_CON_TU_LINK_DE_PAGO"
+    Busca ese link en tu panel Wompi → Recibir pagos → Link de pago genérico.
+    Ejemplo: https://checkout.wompi.co/l/prod_XXXXX
+  */
+
+  /*
+    INTEGRITY HASH (para widget embed):
+    Este hash DEBE generarse en tu servidor/backend, NO en el frontend,
+    porque usa tu llave PRIVADA. Fórmula:
+      SHA256( referencia + montoEnCentavos + "COP" + llave_integridad )
+    
+    Ejemplo en Node.js (backend):
+      const crypto = require('crypto');
+      function getHash(ref, amountCents) {
+        const str = ref + amountCents + 'COP' + 'prod_integrity_ShXccGaKgp42ldRePp4zi8Av9LXW8Qvq...';
+        return crypto.createHash('sha256').update(str).digest('hex');
+      }
+    
+    Por ahora se deja vacío → el widget NO funcionará sin él en producción.
+    Usa el BOTÓN DIRECTO que sí funciona sin hash.
+  */
+  const INTEGRITY_HASH   = '';  // ← Llenar desde tu backend cuando lo tengas
+  const REDIRECT_URL     = 'https://zonatechgeek.com/gracias';
+
+  /* ── Referencias al DOM ── */
+  const container  = document.getElementById('wompiWidgetContainer');
+  const amountInput = document.getElementById('wompiAmount');
+  const presets    = document.querySelectorAll('.wompi-preset');
+  const directBtn  = document.getElementById('wompiDirectBtn');
+
+  if (!container || !amountInput) return;
+
+  /* ── Montos preset ── */
+  presets.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presets.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      amountInput.value = btn.dataset.amount;
+      buildWidget(+btn.dataset.amount);
+    });
+  });
+
+  /* ── Actualizar widget al cambiar monto manualmente ── */
+  let debounceTimer;
+  amountInput.addEventListener('input', () => {
+    presets.forEach(b => b.classList.remove('selected'));
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const v = parseInt(amountInput.value, 10);
+      if (v >= 1000) buildWidget(v);
+    }, 600);
+  });
+
+  /* ── Construir / reinyectar el widget embed ── */
+  function buildWidget(amountCOP) {
+    // Limpiar contenedor anterior
+    container.innerHTML = '';
+
+    // Si no hay hash, no mostrar el widget embed (requiere backend)
+    if (!INTEGRITY_HASH) {
+      container.innerHTML = `
+        <div style="font-size:.75rem;color:var(--fg-m);text-align:center;padding:.5rem;
+                    background:rgba(255,165,0,.07);border:1px solid rgba(255,165,0,.2);
+                    border-radius:8px;line-height:1.5;">
+          <i class="fas fa-info-circle" style="color:#f97316"></i>
+          El widget embed requiere un backend para generar el hash de integridad.<br/>
+          <strong style="color:#f97316">Usa el botón "Pagar ahora" de abajo</strong> — funciona directamente.
+        </div>`;
+      return;
+    }
+
+    // Generar referencia única
+    const ref = 'ZTG-' + Date.now();
+
+    /*
+      Widget oficial Wompi — se inyecta dinámicamente porque
+      necesita atributos calculados (monto, referencia, hash).
+      Documentación: https://docs.wompi.co/docs/colombia/widget
+    */
+    const script = document.createElement('script');
+    script.src = 'https://checkout.wompi.co/widget.js';
+    script.setAttribute('data-render',             'button');
+    script.setAttribute('data-public-key',          WOMPI_PUB_KEY);
+    script.setAttribute('data-currency',            'COP');
+    script.setAttribute('data-amount-in-cents',     String(amountCOP * 100));
+    script.setAttribute('data-reference',           ref);
+    script.setAttribute('data-signature:integrity', INTEGRITY_HASH);
+    script.setAttribute('data-redirect-url',        REDIRECT_URL);
+    container.appendChild(script);
+  }
+
+  /* ── Inicializar con monto por defecto (mantenimiento básico) ── */
+  amountInput.value = '60999';
+  buildWidget(60999);
+
+})();
