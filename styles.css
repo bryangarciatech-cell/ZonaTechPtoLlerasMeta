@@ -946,3 +946,119 @@ button { font-family:inherit; }
   .exp-stats { grid-template-columns:1fr; }
   .channel-text span { font-size:.65rem; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   WOMPI PRODUCCIÓN — estilos adicionales
+════════════════════════════════════════════════════════════ */
+
+/* Badge "Producción activa" */
+.wompi-prod-badge {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.28rem .85rem;
+  background:rgba(57,255,20,.1); border:1px solid rgba(57,255,20,.3);
+  border-radius:99px; font-size:.72rem; font-weight:700;
+  color:#39ff14; letter-spacing:.5px;
+  margin-bottom:.9rem;
+}
+.wompi-prod-badge i { font-size:.8rem; }
+
+/* Selector de monto */
+.wompi-amount-wrap {
+  width:100%; margin:1rem 0 .8rem;
+  background:rgba(0,0,0,.25); border:1px solid rgba(0,212,255,.12);
+  border-radius:var(--r,12px); padding:1rem;
+}
+.wompi-amount-label {
+  display:flex; align-items:center; gap:.4rem;
+  font-size:.78rem; font-weight:600; color:var(--fg-m,#7a8fa6);
+  margin-bottom:.6rem;
+}
+.wompi-amount-label i { color:var(--blue,#00d4ff); }
+.wompi-amount-row {
+  display:flex; align-items:center; gap:.4rem;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+  border-radius:8px; padding:.5rem .8rem; margin-bottom:.7rem;
+}
+.wompi-currency {
+  font-family:var(--fd,'Orbitron',monospace); font-size:1rem;
+  font-weight:700; color:var(--blue,#00d4ff);
+}
+.wompi-amount-input {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--fg,#e8f4ff); font-family:var(--fd,'Orbitron',monospace);
+  font-size:.95rem; font-weight:600; width:100%;
+  -moz-appearance:textfield;
+}
+.wompi-amount-input::-webkit-outer-spin-button,
+.wompi-amount-input::-webkit-inner-spin-button { -webkit-appearance:none; }
+.wompi-amount-input::placeholder { color:var(--fg-d,#3d5168); font-size:.82rem; }
+.wompi-amount-input:focus { outline:none; }
+
+/* Botones de montos predefinidos */
+.wompi-preset-btns {
+  display:flex; flex-wrap:wrap; gap:.4rem;
+}
+.wompi-preset {
+  padding:.28rem .7rem;
+  background:rgba(168,85,247,.1); border:1px solid rgba(168,85,247,.22);
+  border-radius:99px; font-size:.72rem; font-weight:600;
+  color:#c084fc; cursor:pointer;
+  transition:background .25s, border-color .25s, color .25s, transform .15s;
+}
+.wompi-preset:hover {
+  background:rgba(168,85,247,.22); border-color:var(--purple,#a855f7);
+  color:#fff; transform:scale(1.05);
+}
+.wompi-preset.selected {
+  background:var(--purple,#a855f7); border-color:var(--purple,#a855f7);
+  color:#fff; box-shadow:0 0 12px rgba(168,85,247,.4);
+}
+
+/* Contenedor del widget embed */
+.wompi-widget-wrap {
+  margin:.8rem 0;
+  display:flex; justify-content:center;
+}
+/* El script de Wompi inyecta un <form> aquí — centramos su botón */
+.wompi-widget-wrap form {
+  display:flex; justify-content:center;
+}
+
+/* Botón directo (link de pago) */
+.btn-wompi-direct {
+  display:flex; align-items:center; justify-content:center;
+  gap:.6rem; width:100%; padding:.85rem 1.5rem;
+  background:linear-gradient(135deg,#6326c8,#a855f7);
+  color:#fff; border:none; border-radius:10px;
+  font-family:var(--fd,'Orbitron',monospace);
+  font-size:.78rem; font-weight:700; letter-spacing:1px;
+  cursor:pointer; text-decoration:none;
+  transition:box-shadow .32s, transform .32s;
+  position:relative; overflow:hidden;
+}
+.btn-wompi-direct::before {
+  content:''; position:absolute; inset:0;
+  background:rgba(255,255,255,.1);
+  transform:translateX(-110%) skewX(-15deg);
+  transition:transform .4s;
+}
+.btn-wompi-direct:hover::before { transform:translateX(120%) skewX(-15deg); }
+.btn-wompi-direct:hover {
+  box-shadow:0 0 30px rgba(99,38,200,.6), 0 6px 20px rgba(168,85,247,.3);
+  transform:translateY(-2px);
+}
+.btn-wompi-direct .fa-arrow-right { font-size:.72rem; margin-left:auto; }
+
+/* Nota de seguridad */
+.wompi-direct-note {
+  display:flex; align-items:center; justify-content:center; gap:.4rem;
+  margin-top:.75rem; font-size:.72rem; color:var(--fg-m,#7a8fa6);
+}
+.wompi-direct-note i { color:var(--green,#39ff14); }
+
+/* Responsive */
+@media(max-width:480px) {
+  .wompi-preset-btns { gap:.3rem; }
+  .wompi-preset { font-size:.68rem; padding:.24rem .6rem; }
+  .btn-wompi-direct { font-size:.72rem; padding:.75rem 1rem; }
+}
